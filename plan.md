@@ -13,7 +13,6 @@
     - getHourlyAvg
     - `getDailyAvg($start_day,)`
     - getLatest
-    - 
 
 ```php
 

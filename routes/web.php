@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/devices/add', [DeviceController::class, 'index']);
+//Route::post('devices/add', [])
+
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('app.welcome');
 });
 
 
