@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/test', function() {
+	dd(\App\DataTypesEnum::getValueArray());
+});
+
 Route::get('/devices/add', [DeviceController::class, 'index']);
 //Route::post('devices/add', [])
 
