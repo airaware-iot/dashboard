@@ -3,12 +3,11 @@
 namespace App\Services;
 
 use App\AggregationOptions;
-use App\SensorDataTypes;
 use App\Exceptions\AggregationException;
 use App\Models\Data;
-use Carbon\Carbon;
-use Exception;
+use App\SensorDataTypes;
 use App\TimeConstants;
+use Carbon\Carbon;
 
 class DataAggregationService
 {
@@ -17,19 +16,19 @@ class DataAggregationService
 	/**
 	 * Aggregates data based its type, time window and aggregation option
 	 * @param  SensorDataTypes  $dataType
-	 * @param  AggregationOptions  $type
+	 * @param  AggregationOptions  $aggregationType
 	 * @param  Carbon  $timeLater
 	 * @param  Carbon  $timeEarlier
 	 * @return array<int, array{timestamp: string, average: float}>
 	 */
 	public static function aggregateData(
 		SensorDataTypes $dataType,
-		AggregationOptions $type,
+		AggregationOptions $aggregationType,
 		Carbon $timeLater,
 		Carbon $timeEarlier
 	): array
 	{
-		$coefficient = match($type) {
+		$coefficient = match($aggregationType) {
 			AggregationOptions::HOURLY 	=> TimeConstants::SECONDS_IN_HOUR->value,
 			AggregationOptions::DAILY 	=> TimeConstants::SECONDS_IN_DAY->value,
 		};
@@ -44,7 +43,7 @@ class DataAggregationService
 
 		$aggregatedValues = [];
 		$currentPeriodStart = null;
-		$totalWeight = 0;
+		$totalWeight = 1;
 		$sum = 0;
 
 		foreach($values as $value)
@@ -65,7 +64,8 @@ class DataAggregationService
 				];
 
 				$currentPeriodStart->addSeconds($coefficient);
-				$totalWeight = $sum = 0;
+				$totalWeight = 1;
+				$sum = 0;
 			}
 		}
 
