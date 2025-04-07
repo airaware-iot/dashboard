@@ -7,7 +7,7 @@ use App\Services\DataAggregationService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function() {
-	dd(Data::getLastFortyEightHours(SensorDataTypes::TEMPERATURE));
+	dd(Data::getHighestHourlyValue(SensorDataTypes::TEMPERATURE, now(), now()->subHours(10)));
 });
 
 Route::get('/devices/add', [DeviceController::class, 'index']);

@@ -21,6 +21,9 @@ class Data extends Model
 		'timestamp' => 'datetime',
 	];
 
+	/*
+	 * Data aggregation methods
+	 */
 
 	public static function getHourlyAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
 	{
@@ -31,6 +34,58 @@ class Data extends Model
 	{
 		return DataAggregationService::aggregateData($dataType, AggregationOptions::DAILY, $dateFrom, $dateTo);
 	}
+
+	/*
+	 * Statistical average helpers
+	 */
+	public static function getLatestValue(SensorDataTypes $dataType): float
+	{
+		return (float)self::whereType($dataType->value)->first()->data;
+	}
+
+	public static function getHighestHourlyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	{
+		$collection = collect(self::getHourlyAvg($dataType, $dateFrom, $dateTo));
+
+		return $collection->max('average');
+	}
+
+	public static function getLowestHourlyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	{
+		$collection = collect(self::getHourlyAvg($dataType, $dateFrom, $dateTo));
+
+		return $collection->min('average');
+	}
+
+	public static function getMedianHourlyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	{
+		$collection = collect(self::getHourlyAvg($dataType, $dateFrom, $dateTo));
+
+		return $collection->median('average');
+	}
+
+
+	public static function getHighestDailyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	{
+		$collection = collect(self::getDailyAvg($dataType, $dateFrom, $dateTo));
+
+		return $collection->max('average');
+	}
+
+	public static function getLowestDailyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	{
+		$collection = collect(self::getDailyAvg($dataType, $dateFrom, $dateTo));
+
+		return $collection->min('average');
+	}
+
+	public static function getMedianDailyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	{
+		$collection = collect(self::getDailyAvg($dataType, $dateFrom, $dateTo));
+
+		return $collection->median('average');
+	}
+
 
 
 	/*

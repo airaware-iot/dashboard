@@ -5,10 +5,10 @@
     - [ ] Model: name, type
     - [ ] Config for what type corresponds to what icon _or logic?_
 - [ ] **Data**
-    - [ ] Model: type, value(str), timestamp
+    - [x] Model: type, value(str), timestamp
     - [ ] Observer: Observe new data coming in and perform "sorting" and "labeling" data
-    - [ ] Configuration file to cast a data entry to the right data type based on `type` column
-- [ ] **Aggregate**
+    - [x] Configuration file to cast a data entry to the right data type based on `type` column _not necessary for now_
+- [x] **Aggregate**
     - [ ] Model: 
     - aggregateData
     - `getDailyAvg($start_day,)`
