@@ -4,14 +4,22 @@ namespace App\Services;
 
 use App\Models\Data;
 use Carbon\Carbon;
+use Carbon\Exceptions\ParseErrorException;
+use Exception;
 
 class DataAggregationService
 {
-	public static function getHourlyAvg(string $dataType, Carbon $timeTo, Carbon $timeFrom): array
+	public static function getHourlyAvg(string $dataType, Carbon $timeLater, Carbon $timeEarlier): array
 	{
-		$timeFrom->subHour();
+		$timeEarlier->subHour();
+		try {
+			$values = self::getWeightedValues($dataType, $timeEarlier, $timeLater);
+		}
+		catch(Exception) {
+			\Log::info("Invalid datetime range: {$timeEarlier->format('Y-m-d h:m:s')} - {$timeLater->format('Y-m-d h:m:s')}");
+			return [];
+		}
 
-		$values = self::getWeightedValues($dataType, $timeFrom, $timeTo);
 		$aggregated_values = [];
 
 		foreach($values as $value)
@@ -47,13 +55,20 @@ class DataAggregationService
 		// TODO: finish
 	}
 
-	protected static function getWeightedValues($dataType, $timeFrom, $timeTo): array
+	/**
+	 * @throws Exception
+	 */
+	protected static function getWeightedValues(string $dataType, Carbon $timeEarlier, Carbon $timeLater): array
 	{
+		if($timeEarlier >= $timeLater) throw new Exception('The date range is invalid.', 500);
+
 		$data = Data::whereType($dataType)
-			->whereBetween('timestamp', [$timeFrom, $timeTo])
+			->whereBetween('timestamp', [$timeEarlier, $timeLater])
 			->orderBy('timestamp','asc')
 			->get();
 		$data->pluck(['timestamp', 'data']);
+
+		echo count($data);
 
 		$values = [];
 

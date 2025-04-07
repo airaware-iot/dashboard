@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\Data;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function() {
-	dd(\App\DataTypesEnum::getValueArray());
+	dd(Data::getLastHour('temperature'));
 });
 
 Route::get('/devices/add', [DeviceController::class, 'index']);
