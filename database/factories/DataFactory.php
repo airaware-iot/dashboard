@@ -20,7 +20,7 @@ class DataFactory extends Factory
         return [
 			'type' => 'temperature',
 			'data' => (string)(fake()->numberBetween(100,400) / 10),
-			'timestamp' => fake()->dateTimeBetween(now()->subDays(1), now())
+			'timestamp' => fake()->dateTimeBetween(now()->subDays(5), now())
         ];
     }
 }

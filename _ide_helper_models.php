@@ -16,7 +16,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property \App\DataTypesEnum $type
+ * @property \App\SensorDataTypes $type
  * @property string $data
  * @property string $timestamp
  * @property \Illuminate\Support\Carbon|null $created_at

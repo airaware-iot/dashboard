@@ -2,73 +2,95 @@
 
 namespace App\Services;
 
+use App\AggregationOptions;
+use App\SensorDataTypes;
+use App\Exceptions\AggregationException;
 use App\Models\Data;
 use Carbon\Carbon;
-use Carbon\Exceptions\ParseErrorException;
 use Exception;
+use App\TimeConstants;
 
 class DataAggregationService
 {
-	public static function getHourlyAvg(string $dataType, Carbon $timeLater, Carbon $timeEarlier): array
+	protected static string $timeFormat = 'Y-m-d H:i:s';
+
+	/**
+	 * Aggregates data based its type, time window and aggregation option
+	 * @param  SensorDataTypes  $dataType
+	 * @param  AggregationOptions  $type
+	 * @param  Carbon  $timeLater
+	 * @param  Carbon  $timeEarlier
+	 * @return array<int, array{timestamp: string, average: float}>
+	 */
+	public static function aggregateData(
+		SensorDataTypes $dataType,
+		AggregationOptions $type,
+		Carbon $timeLater,
+		Carbon $timeEarlier
+	): array
 	{
-		$timeEarlier->subHour();
+		$coefficient = match($type) {
+			AggregationOptions::HOURLY 	=> TimeConstants::SECONDS_IN_HOUR->value,
+			AggregationOptions::DAILY 	=> TimeConstants::SECONDS_IN_DAY->value,
+		};
+
 		try {
-			$values = self::getWeightedValues($dataType, $timeEarlier, $timeLater);
+			$values = self::getWeightedValues($dataType->value, $timeEarlier, $timeLater);
 		}
-		catch(Exception) {
-			\Log::info("Invalid datetime range: {$timeEarlier->format('Y-m-d h:m:s')} - {$timeLater->format('Y-m-d h:m:s')}");
+		catch(AggregationException) {
+			\Log::info("Invalid datetime range: {$timeEarlier->format(self::$timeFormat)} - {$timeLater->format(self::$timeFormat)}");
 			return [];
 		}
 
-		$aggregated_values = [];
+		$aggregatedValues = [];
+		$currentPeriodStart = null;
+		$totalWeight = 0;
+		$sum = 0;
 
 		foreach($values as $value)
 		{
-			static $current_hour = $value['timestamp'];
-			static $count = 0;
-			static $sum = 0;
+			$currentPeriodStart ??= $value['timestamp'];
+//			echo "Sum: $sum, Value: {$value['data']}, Weight: {$value['weight']}, Date: {$value['timestamp']} <br>";
 
-
-			if($current_hour->diffInSeconds($value['timestamp']) <= 3600)
+			if($currentPeriodStart->diffInSeconds($value['timestamp']) <= $coefficient)
 			{
-				$count++;
+				$totalWeight += $value['weight'];
 				$sum += $value['data'] * $value['weight'];
 			}
 			else
 			{
-				$aggregated_values[] = [
-					'timestamp' => $current_hour->format('Y-m-d H:m:s'),
-					'average' => round(num: $sum / 3600, precision: 2),
+				$aggregatedValues[] = [
+					'timestamp' => $currentPeriodStart->format(self::$timeFormat),
+					'average' => round(num: $sum / $totalWeight, precision: 2),
 				];
 
-				$current_hour->addHour();
-				$count = 0;
-				$sum = 0;
+				$currentPeriodStart->addSeconds($coefficient);
+				$totalWeight = $sum = 0;
 			}
 		}
 
-		return $aggregated_values;
+		// Addresses the remaining data which may not add up to exactly one hour from last aggregation
+		$aggregatedValues[] = [
+			'timestamp' => $currentPeriodStart->format(self::$timeFormat),
+			'average' => round(num: $sum / $totalWeight, precision: 2),
+		];
+
+		return $aggregatedValues;
 	}
 
-	public static function getDailyAvg()
-	{
-		// TODO: finish
-	}
 
 	/**
-	 * @throws Exception
+	 * @throws AggregationException
 	 */
 	protected static function getWeightedValues(string $dataType, Carbon $timeEarlier, Carbon $timeLater): array
 	{
-		if($timeEarlier >= $timeLater) throw new Exception('The date range is invalid.', 500);
+		if($timeEarlier >= $timeLater) throw new AggregationException('The date range is invalid.', 500);
 
 		$data = Data::whereType($dataType)
 			->whereBetween('timestamp', [$timeEarlier, $timeLater])
 			->orderBy('timestamp','asc')
 			->get();
 		$data->pluck(['timestamp', 'data']);
-
-		echo count($data);
 
 		$values = [];
 

@@ -4,7 +4,7 @@ use App\Models\Data;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function() {
-	dd(Data::getLastHour('temperature'));
+
 });
 
 Route::get('/devices/add', [DeviceController::class, 'index']);

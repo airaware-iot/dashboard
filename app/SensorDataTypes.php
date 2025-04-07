@@ -2,7 +2,7 @@
 
 namespace App;
 
-enum DataTypesEnum: string
+enum SensorDataTypes: string
 {
     case TEMPERATURE = 'temperature';
 	case HUMIDITY = 'humidity';

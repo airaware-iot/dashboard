@@ -10,7 +10,7 @@
     - [ ] Configuration file to cast a data entry to the right data type based on `type` column
 - [ ] **Aggregate**
     - [ ] Model: 
-    - getHourlyAvg
+    - aggregateData
     - `getDailyAvg($start_day,)`
     - getLatest
 
@@ -24,7 +24,7 @@ public class deviceDataService()
     
     function getLatest($dataType) {}
     
-    function getHourlyAvg($dataType, $dateFrom, $dateTo) {
+    function aggregateData($dataType, $dateFrom, $dateTo) {
         // The sensors send data irregularly, meaning that a simple avg() doesnt work as a certain
         // value may have been current longer. I think the way to solve this is this:
         
@@ -42,10 +42,10 @@ public class deviceDataService()
     
     }
     function getDailyAvg($dataType, $dateFrom, $dateTo, ) {
-        // Logic is the same as getHourlyAvg()
+        // Logic is the same as aggregateData()
     }
     
-    // Based on getHourlyAvg and getDailyAvg
+    // Based on aggregateData and getDailyAvg
     // Note: these return a collection, N days or N hours depending
     
     function getLastHour(now(), now()->subHour())

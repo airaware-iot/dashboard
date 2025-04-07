@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\DataTypesEnum;
+use App\SensorDataTypes;
 use App\Services\DataAggregationService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,20 +15,27 @@ class Data extends Model
 	protected $fillable = ['type', 'data', 'timestamp'];
 
 	protected $casts = [
-		'type' => DataTypesEnum::class,
+		'type' => SensorDataTypes::class,
 		'timestamp' => 'datetime',
 	];
 
 	protected static function isValidDataType($dataType): bool
 	{
-		return in_array($dataType, DataTypesEnum::getValueArray());
+		return in_array($dataType, SensorDataTypes::getValueArray());
 	}
 
 	public static function getHourlyAvg($dataType, $dateFrom, $dateTo): array
 	{
 		if(! self::isValidDataType($dataType)) return [];
 
-		return DataAggregationService::getHourlyAvg($dataType, $dateFrom, $dateTo);
+		return DataAggregationService::aggregateData($dataType, $dateFrom, $dateTo);
+	}
+
+	public static function getDailyAvg($dataType, $dateFrom, $dateTo): array
+	{
+		if(! self::isValidDataType($dataType)) return [];
+
+		return DataAggregationService::getDailyAvg($dataType, $dateFrom, $dateTo);
 	}
 
 	/*
@@ -62,5 +69,9 @@ class Data extends Model
 		return self::getHourlyAvg($dataType, now(), now()->subHours(72));
 	}
 
+	public static function getLastTwoDays($dataType): array
+	{
+
+	}
 
 }
