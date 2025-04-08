@@ -8,13 +8,23 @@ use Livewire\Component;
 
 class ChartWidget extends Component
 {
-	// public Sensors $sensors; TODO: finish
+	/*
+	 * TODO LIST
+	 *
+	 * - finish sensor "scoping"
+	 * - create chart annotations for hygienically recommended values
+	 * - fix DataAggregationService always provide the right amount of values (e.g. 24h = 24x) - just iterate remainder
+	 * - fix the broken X axis - should show date(time) =
+	 * probably a custom method that creates short human readable version (like -1d or -1h or something like that)
+	 */
+
+	// public Sensors $sensors; TODO
 	public SensorDataTypes $selectedDataType;
 	public TimeIntervals $selectedTimeInterval;
 
 	public string $chartTitle;
 	public string $chartColor;
-	public string $chartXAxisTitle = 'time';
+	public string $chartXAxisTitle = 'Doba';
 	public string $chartXAxisUnit = '';
 	public string $chartXOffset;
 	public string $chartYAxisTitle;

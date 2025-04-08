@@ -14,7 +14,6 @@
     use Maantje\Charts\YAxis;
 @endphp
 
-{{--@dd($chartData, $chartMinValue, $chartMaxValue, $chartXOffset)--}}
 <div>
     <select wire:change="updateTimeInterval($event.target.value)">
         @foreach(TimeIntervals::cases() as $option)
@@ -71,7 +70,7 @@
 						labelMargin: 10,
 						formatter: Formatter::template(":value $chartYAxisUnit"),
 					),
-					new YAxis(
+//					new YAxis(
 //						name: 'elevation',
 //						title: 'Elevation',
 //						minValue: 0,
@@ -90,10 +89,10 @@
 //						labelMargin: 10,
 //						formatter: Formatter::template(':value m')
 
-					),
+//					),
 				],
-//				xAxis: new XAxis(
-//					title: 'Time',
+				xAxis: new XAxis(
+					title: $chartXAxisTitle,
 //					annotations: [
 //						new XAxisLineAnnotation(
 //							x: 1725331334 + 3600 + 1800,
@@ -108,8 +107,8 @@
 //							label: 'Last hour',
 //						),
 //					],
-//					formatter: Formatter::timestamp(),
-//				),
+					formatter: Formatter::timestamp(),
+				),
 				series: [
 					new Lines(
 						lines: [
