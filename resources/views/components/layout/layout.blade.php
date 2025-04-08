@@ -1,12 +1,12 @@
-@props([
-	'title' => config('app.name'),
-])
-
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
-    @livewireStyles
+    @props([
+	    'title' => config('app.name'),
+    ])
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
     
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -24,7 +24,6 @@
     </aside>
     <main class="h-full p-6 bg-slate-300 rounded-2xl overflow-y-auto">
         {{$slot}}
-        Content
     </main>
     @livewireScripts
 </body>

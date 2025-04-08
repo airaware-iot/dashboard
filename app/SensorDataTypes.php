@@ -9,6 +9,26 @@ enum SensorDataTypes: string
 	case LIGHTLEVEL = 'light_level';
 	case PRESSURE = 'pressure';
 
+	public function getUnit(): string
+	{
+		return match($this) {
+			self::TEMPERATURE => '˚C',
+			self::PRESSURE => 'HPa',
+			self::HUMIDITY => '%',
+			self::LIGHTLEVEL => 'lm',
+		};
+	}
+
+	public function getLabel(): string
+	{
+		return match($this) {
+			self::TEMPERATURE => 'Teplota',
+			self::PRESSURE => 'Tlak',
+			self::HUMIDITY => 'Vlhkost',
+			self::LIGHTLEVEL => 'Množství světla',
+		};
+	}
+
 	public function getDataType(): string
 	{
 		return match($this) {

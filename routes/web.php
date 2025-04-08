@@ -1,13 +1,11 @@
 <?php
 
-use App\AggregationOptions;
 use App\Models\Data;
 use App\SensorDataTypes;
-use App\Services\DataAggregationService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function() {
-	dd(Data::getHighestHourlyValue(SensorDataTypes::TEMPERATURE, now(), now()->subHours(10)));
+	dd(Data::getLastTwoWeeks(SensorDataTypes::TEMPERATURE));
 });
 
 Route::get('/devices/add', [DeviceController::class, 'index']);

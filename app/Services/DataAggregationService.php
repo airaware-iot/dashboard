@@ -14,7 +14,7 @@ class DataAggregationService
 	protected static string $timeFormat = 'Y-m-d H:i:s';
 
 	/**
-	 * Aggregates data based its type, time window and aggregation option
+	 * Aggregates data based its type, time window and aggregation option. If no data is found, returns an empty array.
 	 * @param  SensorDataTypes  $dataType
 	 * @param  AggregationOptions  $aggregationType
 	 * @param  Carbon  $timeLater
@@ -35,6 +35,8 @@ class DataAggregationService
 
 		try {
 			$values = self::getWeightedValues($dataType->value, $timeEarlier, $timeLater);
+
+			if(! $values) return [];
 		}
 		catch(AggregationException) {
 			\Log::info("Invalid datetime range: {$timeEarlier->format(self::$timeFormat)} - {$timeLater->format(self::$timeFormat)}");
@@ -60,7 +62,7 @@ class DataAggregationService
 			{
 				$aggregatedValues[] = [
 					'timestamp' => $currentPeriodStart->format(self::$timeFormat),
-					'average' => round(num: $sum / $totalWeight, precision: 2),
+					'value' => round(num: $sum / $totalWeight, precision: 2),
 				];
 
 				$currentPeriodStart->addSeconds($coefficient);
@@ -72,7 +74,7 @@ class DataAggregationService
 		// Addresses the remaining data which may not add up to exactly one hour from last aggregation
 		$aggregatedValues[] = [
 			'timestamp' => $currentPeriodStart->format(self::$timeFormat),
-			'average' => round(num: $sum / $totalWeight, precision: 2),
+			'value' => round(num: $sum / $totalWeight, precision: 2),
 		];
 
 		return $aggregatedValues;
@@ -91,6 +93,8 @@ class DataAggregationService
 			->orderBy('timestamp','asc')
 			->get();
 		$data->pluck(['timestamp', 'data']);
+
+		if($data->isEmpty())
 
 		$values = [];
 
