@@ -5,6 +5,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
+    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <meta charset="UTF-8">
@@ -25,5 +26,6 @@
         {{$slot}}
         Content
     </main>
+    @livewireScripts
 </body>
 </html>
