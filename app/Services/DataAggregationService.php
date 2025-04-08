@@ -6,7 +6,6 @@ use App\AggregationOptions;
 use App\Exceptions\AggregationException;
 use App\Models\Data;
 use App\SensorDataTypes;
-use App\TimeConstants;
 use Carbon\Carbon;
 
 class DataAggregationService
@@ -28,10 +27,7 @@ class DataAggregationService
 		Carbon $timeEarlier
 	): array
 	{
-		$coefficient = match($aggregationType) {
-			AggregationOptions::HOURLY 	=> TimeConstants::SECONDS_IN_HOUR->value,
-			AggregationOptions::DAILY 	=> TimeConstants::SECONDS_IN_DAY->value,
-		};
+		$interval = $aggregationType->getInterval();
 
 		try {
 			$values = self::getWeightedValues($dataType->value, $timeEarlier, $timeLater);
@@ -53,7 +49,7 @@ class DataAggregationService
 			$currentPeriodStart ??= $value['timestamp'];
 //			echo "Sum: $sum, Value: {$value['data']}, Weight: {$value['weight']}, Date: {$value['timestamp']} <br>";
 
-			if($currentPeriodStart->diffInSeconds($value['timestamp']) <= $coefficient)
+			if($currentPeriodStart->diffInSeconds($value['timestamp']) <= $interval)
 			{
 				$totalWeight += $value['weight'];
 				$sum += $value['data'] * $value['weight'];
@@ -65,7 +61,7 @@ class DataAggregationService
 					'value' => round(num: $sum / $totalWeight, precision: 2),
 				];
 
-				$currentPeriodStart->addSeconds($coefficient);
+				$currentPeriodStart->addSeconds($interval);
 				$totalWeight = 1;
 				$sum = 0;
 			}
