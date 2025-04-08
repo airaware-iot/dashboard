@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('data', function (Blueprint $table) {
             $table->id();
-			$table->enum('type', SensorDataTypes::getValueArray());
+			$table->enum('type', SensorDataTypes::getValuesArray());
 			$table->string('data');
 			$table->dateTime('timestamp');
             $table->timestamps();

@@ -12,37 +12,24 @@ enum SensorDataTypes: string
 	public function getUnit(): string
 	{
 		return match($this) {
-			self::TEMPERATURE => '˚C',
-			self::PRESSURE => 'HPa',
-			self::HUMIDITY => '%',
-			self::LIGHTLEVEL => 'lm',
+			self::TEMPERATURE 	=> '˚C',
+			self::PRESSURE 		=> 'HPa',
+			self::HUMIDITY 		=> '%',
+			self::LIGHTLEVEL 	=> 'lm',
 		};
 	}
 
 	public function getLabel(): string
 	{
 		return match($this) {
-			self::TEMPERATURE => 'Teplota',
-			self::PRESSURE => 'Tlak',
-			self::HUMIDITY => 'Vlhkost',
-			self::LIGHTLEVEL => 'Množství světla',
+			self::TEMPERATURE 	=> 'Teplota',
+			self::PRESSURE 		=> 'Tlak',
+			self::HUMIDITY 		=> 'Vlhkost',
+			self::LIGHTLEVEL 	=> 'Množství světla',
 		};
 	}
 
-	public function getDataType(): string
-	{
-		return match($this) {
-			self::TEMPERATURE,
-			self::PRESSURE
-			=> 'float',
-
-			self::HUMIDITY,
-			self::LIGHTLEVEL
-			=> 'percentage'
-		};
-	}
-
-	public static function getValueArray(): array
+	public static function getValuesArray(): array
 	{
 		return array_column(self::cases(), 'value');
 	}
