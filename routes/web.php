@@ -5,6 +5,7 @@ use App\SensorDataTypes;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function() {
+//	dd(\App\Services\DataAggregationService::getDataPointsCount(\App\AggregationOptions::HOURLY, now(), now()->subDays(2)));
 	dd(Data::getLastTwoWeeks(SensorDataTypes::TEMPERATURE));
 });
 

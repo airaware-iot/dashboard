@@ -43,7 +43,7 @@ class ChartWidget extends Component
 	public array $chartAnnotations = []; // TODO: finish with hygienically recommended values
 
 
-	protected int $screenWidth = 1200;
+	public static int $chartWidth = 1200;
 
 	public function mount(SensorDataTypes $dataType, string $title = 'Chart', string $color = 'red'): void
 	{
@@ -56,7 +56,11 @@ class ChartWidget extends Component
 		$this->selectedTimeInterval ??= TimeIntervals::LAST_TWENTY_FOUR_HOURS;
 
 		// Setup chart data
-		$this->setAllChartData();
+		$this->setChartData();
+		$this->setChartMinMaxValues();
+		$this->setChartYAxisTitle();
+		$this->setChartYAxisUnit();
+		$this->setXOffset();
 	}
 
 	public function render()
@@ -67,15 +71,8 @@ class ChartWidget extends Component
 	public function updateTimeInterval($interval): void
 	{
 		$this->selectedTimeInterval = TimeIntervals::from($interval);
-		$this->setAllChartData();
-	}
-
-	protected function setAllChartData(): void
-	{
 		$this->setChartData();
 		$this->setChartMinMaxValues();
-		$this->setChartYAxisTitle();
-		$this->setChartYAxisUnit();
 		$this->setXOffset();
 	}
 
@@ -88,8 +85,8 @@ class ChartWidget extends Component
 	{
 		$data = collect($this->chartData);
 
-		$this->chartMinValue = floor($data->min('value') - 2);
-		$this->chartMaxValue = ceil($data->max('value') + 2);
+		$this->chartMinValue = floor($data->min('value'));
+		$this->chartMaxValue = ceil($data->max('value'));
 	}
 
 	protected function setChartYAxisUnit(): void
@@ -104,6 +101,11 @@ class ChartWidget extends Component
 
 	protected function setXOffset(): void
 	{
-		$this->chartXOffset = $this->screenWidth / count($this->chartData);
+		$count = count($this->chartData);
+
+		$count != 0
+			? $this->chartXOffset = self::$chartWidth / $count
+			: $this->chartXOffset = 0;
+
 	}
 }

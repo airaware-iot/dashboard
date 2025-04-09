@@ -7,6 +7,7 @@ use App\Exceptions\AggregationException;
 use App\Models\Data;
 use App\SensorDataTypes;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class DataAggregationService
 {
@@ -30,57 +31,77 @@ class DataAggregationService
 		$interval = $aggregationType->getInterval();
 
 		try {
-			$values = self::getWeightedValues($dataType->value, $timeEarlier, $timeLater);
-
+			$values = self::getValues($dataType->value, $timeEarlier, $timeLater);
 			if(! $values) return [];
 		}
 		catch(AggregationException) {
-			\Log::info("Invalid datetime range: {$timeEarlier->format(self::$timeFormat)} - {$timeLater->format(self::$timeFormat)}");
-			return [];
+			return []; // Invalid timespan
 		}
+
+		$dataPointsCount = self::getDataPointsCount($aggregationType, $timeLater, $timeEarlier);
 
 		$aggregatedValues = [];
-		$currentPeriodStart = null;
-		$totalWeight = 1;
-		$sum = 0;
+		$currentIntervalStart = $timeEarlier->copy();
+		$nextIntervalStart = $timeEarlier->copy()->addSeconds($interval);
 
-		foreach($values as $value)
-		{
-			$currentPeriodStart ??= $value['timestamp'];
-//			echo "Sum: $sum, Value: {$value['data']}, Weight: {$value['weight']}, Date: {$value['timestamp']} <br>";
+		for($i = 0; $i < $dataPointsCount; $i++) {
+			$currentInterval = $values->whereBetween('timestamp', [$currentIntervalStart, $nextIntervalStart])->all();
+			$currentInterval = array_values($currentInterval); // Re-indexes keys from 0
 
-			if($currentPeriodStart->diffInSeconds($value['timestamp']) <= $interval)
-			{
-				$totalWeight += $value['weight'];
-				$sum += $value['data'] * $value['weight'];
-			}
-			else
-			{
+			if($currentInterval) {
+				$currentIntervalCount = count($currentInterval);
+				$weightedSum = 0;
+				$totalWeight = 0;
+
+				for($j = 0; $j < $currentIntervalCount; $j++) {
+					$currentData = $currentInterval[$j];
+					switch($j) {
+						case 0: // First element
+							$weight = $currentIntervalStart->diffInSeconds($currentData['timestamp']);
+							break;
+						case $currentIntervalCount - 1: // Last element
+							$weight = $currentData['timestamp']->diffInSeconds($nextIntervalStart);
+							break;
+						default: // The rest
+							$nextData = $currentInterval[$j+1];
+							$weight = $currentData['timestamp']->diffInSeconds($nextData['timestamp']);
+							break;
+					}
+					$weightedSum += $currentData['data'] * $weight;
+					$totalWeight += $weight;
+				}
+
 				$aggregatedValues[] = [
-					'timestamp' => $currentPeriodStart->format(self::$timeFormat),
-					'value' => round(num: $sum / $totalWeight, precision: 2),
+					'timestamp' => $currentIntervalStart,
+					'value' => round($weightedSum / $totalWeight, 2)
 				];
-
-				$currentPeriodStart->addSeconds($interval);
-				$totalWeight = 1;
-				$sum = 0;
 			}
+			else {
+				$aggregatedValues[] = [
+					'timestamp' => $currentIntervalStart,
+					'value' => 0
+				];
+			}
+
+			$currentIntervalStart->addSeconds($interval);
+			$nextIntervalStart->addSeconds($interval);
 		}
 
-		// Addresses the remaining data which may not add up to exactly one hour from last aggregation
-		$aggregatedValues[] = [
-			'timestamp' => $currentPeriodStart->format(self::$timeFormat),
-			'value' => round(num: $sum / $totalWeight, precision: 2),
-		];
 
 		return $aggregatedValues;
 	}
 
+	public static function getDataPointsCount(AggregationOptions $option, Carbon $timeTo, Carbon $timeFrom): int
+	{
+		$value = ceil($timeFrom->diffInSeconds($timeTo) / $option->getInterval());
+
+		return max($value, 0);
+	}
 
 	/**
 	 * @throws AggregationException
 	 */
-	protected static function getWeightedValues(string $dataType, Carbon $timeEarlier, Carbon $timeLater): array
+	protected static function getValues(string $dataType, Carbon $timeEarlier, Carbon $timeLater): ?Collection
 	{
 		if($timeEarlier >= $timeLater) throw new AggregationException('The date range is invalid.', 500);
 
@@ -90,23 +111,6 @@ class DataAggregationService
 			->get();
 		$data->pluck(['timestamp', 'data']);
 
-		if($data->isEmpty())
-
-		$values = [];
-
-		for($i = 0; $i < count($data) - 1; $i++) {
-			$curr_data = $data[$i];
-			$next_data = $data[$i + 1];
-
-			$weight = $curr_data->timestamp->diffInSeconds($next_data->timestamp);
-
-			$values[] = [
-				'timestamp' => $curr_data->timestamp,
-				'data' 		=> $curr_data->data,
-				'weight' 	=> $weight,
-			];
-		}
-
-		return $values;
+		return $data->isNotEmpty() ? $data : null;
 	}
 }

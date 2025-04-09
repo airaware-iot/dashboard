@@ -44,6 +44,7 @@
             
             
             $chart = new Chart(
+            width: \App\Livewire\ChartWidget::$chartWidth,
             yAxis: [
 					new YAxis(
                         name: strtolower($chartYAxisTitle),
@@ -91,24 +92,24 @@
 
 //					),
 				],
-				xAxis: new XAxis(
-					title: $chartXAxisTitle,
-//					annotations: [
-//						new XAxisLineAnnotation(
-//							x: 1725331334 + 3600 + 1800,
-//							color: 'green',
-//							label: 'Halfway',
-//							textLeftMargin: -2
-//						),
-//						new XAxisRangeAnnotation(
-//							x1: 1725331334 + 3600 + 3600,
-//							x2: 1725331334 + 3600 + 3600 + 3600,
-//							color: 'blue',
-//							label: 'Last hour',
-//						),
-//					],
-					formatter: Formatter::timestamp(),
-				),
+//				xAxis: new XAxis(
+//					title: $chartXAxisTitle,
+////					annotations: [
+////						new XAxisLineAnnotation(
+////							x: 1725331334 + 3600 + 1800,
+////							color: 'green',
+////							label: 'Halfway',
+////							textLeftMargin: -2
+////						),
+////						new XAxisRangeAnnotation(
+////							x1: 1725331334 + 3600 + 3600,
+////							x2: 1725331334 + 3600 + 3600 + 3600,
+////							color: 'blue',
+////							label: 'Last hour',
+////						),
+////					],
+//					formatter: Formatter::timestamp(),
+//				),
 				series: [
 					new Lines(
 						lines: [
