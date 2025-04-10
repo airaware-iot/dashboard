@@ -4,14 +4,16 @@ namespace App;
 
 enum AggregationOptions: string
 {
-    case HOURLY = 'hourly';
-	case DAILY = 'daily';
+	case MINUTES = 'minutes';
+    case HOURS = 'hours';
+	case DAYS = 'days';
 
 	public function getInterval(): int
 	{
 		return match($this) {
-			self::HOURLY 	=> 3_600,
-			self::DAILY 	=> 86_400,
+			self::MINUTES 	=> 60,
+			self::HOURS 	=> 3_600,
+			self::DAYS 		=> 86_400,
 		};
 	}
 }

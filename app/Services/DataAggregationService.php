@@ -48,50 +48,48 @@ class DataAggregationService
 			$currentInterval = $values->whereBetween('timestamp', [$currentIntervalStart, $nextIntervalStart])->all();
 			$currentInterval = array_values($currentInterval); // Re-indexes keys from 0
 
-			if($currentInterval) {
-				$currentIntervalCount = count($currentInterval);
-				$weightedSum = 0;
-				$totalWeight = 0;
-
-				for($j = 0; $j < $currentIntervalCount; $j++) {
-					$currentData = $currentInterval[$j];
-					switch($j) {
-						case 0: // First element
-							$weight = $currentIntervalStart->diffInSeconds($currentData['timestamp']);
-							break;
-						case $currentIntervalCount - 1: // Last element
-							$weight = $currentData['timestamp']->diffInSeconds($nextIntervalStart);
-							break;
-						default: // The rest
-							$nextData = $currentInterval[$j+1];
-							$weight = $currentData['timestamp']->diffInSeconds($nextData['timestamp']);
-							break;
-					}
-					$weightedSum += $currentData['data'] * $weight;
-					$totalWeight += $weight;
-				}
-
-				$aggregatedValues[] = [
-					'timestamp' => $currentIntervalStart,
-					'value' => round($weightedSum / $totalWeight, 2)
-				];
-			}
-			else {
-				$aggregatedValues[] = [
-					'timestamp' => $currentIntervalStart,
-					'value' => 0
-				];
-			}
+			$aggregatedValues[] = [
+				'timestamp' => $currentIntervalStart,
+				'value' => count($currentInterval) != 0
+					? self::getAggregatedValues($currentInterval, $currentIntervalStart, $nextIntervalStart)
+					: 0
+			];
 
 			$currentIntervalStart->addSeconds($interval);
 			$nextIntervalStart->addSeconds($interval);
 		}
 
-
 		return $aggregatedValues;
 	}
 
-	public static function getDataPointsCount(AggregationOptions $option, Carbon $timeTo, Carbon $timeFrom): int
+	protected static function getAggregatedValues(array $currentInterval, $currentIntervalStart, $nextIntervalStart): float
+	{
+		$currentIntervalCount = count($currentInterval);
+		$weightedSum = 0;
+		$totalWeight = 0;
+
+		for($j = 0; $j < $currentIntervalCount; $j++) {
+			$currentData = $currentInterval[$j];
+			switch($j) {
+				case 0: // First element
+					$weight = $currentIntervalStart->diffInSeconds($currentData['timestamp']);
+					break;
+				case $currentIntervalCount - 1: // Last element
+					$weight = $currentData['timestamp']->diffInSeconds($nextIntervalStart);
+					break;
+				default: // The rest
+					$nextData = $currentInterval[$j+1];
+					$weight = $currentData['timestamp']->diffInSeconds($nextData['timestamp']);
+					break;
+			}
+			$weightedSum += $currentData['data'] * $weight;
+			$totalWeight += $weight;
+		}
+
+		return round($weightedSum / $totalWeight, 2);
+	}
+
+	protected static function getDataPointsCount(AggregationOptions $option, Carbon $timeTo, Carbon $timeFrom): int
 	{
 		$value = ceil($timeFrom->diffInSeconds($timeTo) / $option->getInterval());
 
@@ -108,8 +106,7 @@ class DataAggregationService
 		$data = Data::whereType($dataType)
 			->whereBetween('timestamp', [$timeEarlier, $timeLater])
 			->orderBy('timestamp','asc')
-			->get();
-		$data->pluck(['timestamp', 'data']);
+			->get(['data','timestamp']);
 
 		return $data->isNotEmpty() ? $data : null;
 	}

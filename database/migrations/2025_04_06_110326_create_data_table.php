@@ -17,7 +17,10 @@ return new class extends Migration
 			$table->enum('type', SensorDataTypes::getValuesArray());
 			$table->string('data');
 			$table->dateTime('timestamp');
-            $table->timestamps();
+          	$table->timestamps();
+
+			$table->index('type');
+			$table->index(['timestamp','type']);
         });
     }
 

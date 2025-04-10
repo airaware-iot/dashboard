@@ -25,14 +25,19 @@ class Data extends Model
 	 * Data aggregation methods
 	 */
 
+	public static function getMinutesAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
+	{
+		return DataAggregationService::aggregateData($dataType, AggregationOptions::MINUTES, $dateFrom, $dateTo);
+	}
+
 	public static function getHourlyAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
 	{
-		return DataAggregationService::aggregateData($dataType, AggregationOptions::HOURLY, $dateFrom, $dateTo);
+		return DataAggregationService::aggregateData($dataType, AggregationOptions::HOURS, $dateFrom, $dateTo);
 	}
 
 	public static function getDailyAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
 	{
-		return DataAggregationService::aggregateData($dataType, AggregationOptions::DAILY, $dateFrom, $dateTo);
+		return DataAggregationService::aggregateData($dataType, AggregationOptions::DAYS, $dateFrom, $dateTo);
 	}
 
 	/*
@@ -85,8 +90,6 @@ class Data extends Model
 
 		return $collection->median('average');
 	}
-
-
 
 	/*
 	 * Hourly average helpers
@@ -163,6 +166,4 @@ class Data extends Model
 	{
 		return self::getDailyAvg($dataType, now(), now()->subYear());
 	}
-
-
 }
