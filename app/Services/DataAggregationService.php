@@ -38,22 +38,28 @@ class DataAggregationService
 			return []; // Invalid timespan
 		}
 
-		$dataPointsCount = self::getDataPointsCount($aggregationType, $timeLater, $timeEarlier);
-
 		$aggregatedValues = [];
+		$dataPointsCount = self::getDataPointsCount($aggregationType, $timeLater, $timeEarlier);
 		$currentIntervalStart = $timeEarlier->copy();
 		$nextIntervalStart = $timeEarlier->copy()->addSeconds($interval);
 
 		for($i = 0; $i < $dataPointsCount; $i++) {
-			$currentInterval = $values->whereBetween('timestamp', [$currentIntervalStart, $nextIntervalStart])->all();
-			$currentInterval = array_values($currentInterval); // Re-indexes keys from 0
+			if($values->isEmpty()) {
+				$aggregatedValues[] = ['timestamp' => $currentIntervalStart, 'value' => 0];
+			}
+			else {
+				$currentInterval = $values->where('timestamp', '<=', $nextIntervalStart)->all();
+				$currentInterval = array_values($currentInterval); // Re-indexes keys from 0
 
-			$aggregatedValues[] = [
-				'timestamp' => $currentIntervalStart,
-				'value' => count($currentInterval) != 0
-					? self::getAggregatedValues($currentInterval, $currentIntervalStart, $nextIntervalStart)
-					: 0
-			];
+				$aggregatedValues[] = [
+					'timestamp' => $currentIntervalStart,
+					'value' => count($currentInterval) != 0
+						? self::getAggregatedValues($currentInterval, $currentIntervalStart, $nextIntervalStart)
+						: 0
+				];
+
+				$values = $values->slice(count($currentInterval));
+			}
 
 			$currentIntervalStart->addSeconds($interval);
 			$nextIntervalStart->addSeconds($interval);
