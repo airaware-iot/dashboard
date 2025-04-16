@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Data;
-use App\SensorDataTypes;
+use App\SensorDataType;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function() {
 //	dd(\App\Services\DataAggregationService::getDataPointsCount(\App\AggregationOptions::HOURLY, now(), now()->subDays(2)));
-	dd(Data::getMinutesAvg(SensorDataTypes::TEMPERATURE, now(), now()->subMinutes(100)));
+	dd(Data::getMinutesAvg(SensorDataType::TEMPERATURE, now(), now()->subMinutes(100)));
 });
 
 Route::get('/devices/add', [DeviceController::class, 'index']);

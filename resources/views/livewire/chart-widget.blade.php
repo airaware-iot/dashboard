@@ -1,5 +1,5 @@
 @php
-    use App\TimeIntervals;
+    use App\TimeInterval;
 	use Maantje\Charts\Chart;
 	use Maantje\Charts\Line\Line;
 	use Maantje\Charts\Line\Lines;
@@ -16,7 +16,7 @@
 
 <div>
     <select wire:change="updateTimeInterval($event.target.value)">
-        @foreach(TimeIntervals::cases() as $option)
+        @foreach(TimeInterval::cases() as $option)
             <option
                 value="{{$option->value}}"
                 {{$selectedTimeInterval->value == $option->value ? 'selected' : ''}}

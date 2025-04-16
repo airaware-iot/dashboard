@@ -2,7 +2,7 @@
 
 namespace App;
 
-enum AggregationOptions: string
+enum AggregationInterval: string
 {
 	case MINUTES = 'minutes';
     case HOURS = 'hours';

@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\SensorDataTypes;
-use App\TimeIntervals;
+use App\SensorDataType;
+use App\TimeInterval;
 use Livewire\Component;
 
 class ChartWidget extends Component
@@ -19,8 +19,8 @@ class ChartWidget extends Component
 	 */
 
 	// public Sensors $sensors; TODO
-	public SensorDataTypes $selectedDataType;
-	public TimeIntervals $selectedTimeInterval;
+	public SensorDataType $selectedDataType;
+	public TimeInterval $selectedTimeInterval;
 
 	public string $chartTitle;
 	public string $chartColor;
@@ -45,7 +45,7 @@ class ChartWidget extends Component
 
 	public static int $chartWidth = 1200;
 
-	public function mount(SensorDataTypes $dataType, string $title = 'Chart', string $color = 'red'): void
+	public function mount(SensorDataType $dataType, string $title = 'Chart', string $color = 'red'): void
 	{
 		// Attributes
 		$this->selectedDataType = $dataType;
@@ -53,7 +53,7 @@ class ChartWidget extends Component
 		$this->chartColor = $color;
 
 		// Default values
-		$this->selectedTimeInterval ??= TimeIntervals::LAST_TWENTY_FOUR_HOURS;
+		$this->selectedTimeInterval ??= TimeInterval::LAST_TWENTY_FOUR_HOURS;
 
 		// Setup chart data
 		$this->setChartData();
@@ -70,7 +70,7 @@ class ChartWidget extends Component
 
 	public function updateTimeInterval($interval): void
 	{
-		$this->selectedTimeInterval = TimeIntervals::from($interval);
+		$this->selectedTimeInterval = TimeInterval::from($interval);
 		$this->setChartData();
 		$this->setChartMinMaxValues();
 		$this->setXOffset();

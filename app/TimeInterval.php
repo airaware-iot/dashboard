@@ -4,7 +4,7 @@ namespace App;
 
 use App\Models\Data;
 
-enum TimeIntervals: string
+enum TimeInterval: string
 {
 	case LAST_SIX_HOURS = 'Last 6 Hours';
 	case LAST_TWELVE_HOURS = 'Last 12 Hours';
@@ -19,7 +19,7 @@ enum TimeIntervals: string
 	case LAST_SEMESTER = 'Last Semester';
 	case LAST_YEAR = 'Last Year';
 
-	public function getData(SensorDataTypes $dataType): array
+	public function getData(SensorDataType $dataType): array
 	{
 		return match($this) {
 			self::LAST_SIX_HOURS 			=> Data::getLastSixHours($dataType),

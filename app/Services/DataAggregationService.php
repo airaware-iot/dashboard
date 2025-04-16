@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\AggregationOptions;
+use App\AggregationInterval;
 use App\Exceptions\AggregationException;
 use App\Models\Data;
-use App\SensorDataTypes;
+use App\SensorDataType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,15 +15,15 @@ class DataAggregationService
 
 	/**
 	 * Aggregates data based its type, time window and aggregation option. If no data is found, returns an empty array.
-	 * @param  SensorDataTypes  $dataType
-	 * @param  AggregationOptions  $aggregationType
+	 * @param  SensorDataType  $dataType
+	 * @param  AggregationInterval  $aggregationType
 	 * @param  Carbon  $timeLater
 	 * @param  Carbon  $timeEarlier
 	 * @return array<int, array{timestamp: string, average: float}>
 	 */
 	public static function aggregateData(
-		SensorDataTypes $dataType,
-		AggregationOptions $aggregationType,
+		SensorDataType $dataType,
+		AggregationInterval $aggregationType,
 		Carbon $timeLater,
 		Carbon $timeEarlier
 	): array
@@ -89,7 +89,7 @@ class DataAggregationService
 		return round($weightedSum / $totalWeight, 2);
 	}
 
-	protected static function getDataPointsCount(AggregationOptions $option, Carbon $timeTo, Carbon $timeFrom): int
+	protected static function getDataPointsCount(AggregationInterval $option, Carbon $timeTo, Carbon $timeFrom): int
 	{
 		$value = ceil($timeFrom->diffInSeconds($timeTo) / $option->getInterval());
 

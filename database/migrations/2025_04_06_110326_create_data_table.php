@@ -1,6 +1,6 @@
 <?php
 
-use App\SensorDataTypes;
+use App\SensorDataType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('data', function (Blueprint $table) {
             $table->id();
-			$table->enum('type', SensorDataTypes::getValuesArray());
+			$table->enum('type', SensorDataType::getValuesArray());
 			$table->string('data');
 			$table->dateTime('timestamp');
           	$table->timestamps();

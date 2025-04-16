@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\AggregationOptions;
-use App\SensorDataTypes;
+use App\AggregationInterval;
+use App\SensorDataType;
 use App\Services\DataAggregationService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +17,7 @@ class Data extends Model
 	protected $fillable = ['type', 'data', 'timestamp'];
 
 	protected $casts = [
-		'type' => SensorDataTypes::class,
+		'type' => SensorDataType::class,
 		'timestamp' => 'datetime',
 	];
 
@@ -25,44 +25,44 @@ class Data extends Model
 	 * Data aggregation methods
 	 */
 
-	public static function getMinutesAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
+	public static function getMinutesAvg(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo): array
 	{
-		return DataAggregationService::aggregateData($dataType, AggregationOptions::MINUTES, $dateFrom, $dateTo);
+		return DataAggregationService::aggregateData($dataType, AggregationInterval::MINUTES, $dateFrom, $dateTo);
 	}
 
-	public static function getHourlyAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
+	public static function getHourlyAvg(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo): array
 	{
-		return DataAggregationService::aggregateData($dataType, AggregationOptions::HOURS, $dateFrom, $dateTo);
+		return DataAggregationService::aggregateData($dataType, AggregationInterval::HOURS, $dateFrom, $dateTo);
 	}
 
-	public static function getDailyAvg(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo): array
+	public static function getDailyAvg(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo): array
 	{
-		return DataAggregationService::aggregateData($dataType, AggregationOptions::DAYS, $dateFrom, $dateTo);
+		return DataAggregationService::aggregateData($dataType, AggregationInterval::DAYS, $dateFrom, $dateTo);
 	}
 
 	/*
 	 * Statistical average helpers
 	 */
-	public static function getLatestValue(SensorDataTypes $dataType): float
+	public static function getLatestValue(SensorDataType $dataType): float
 	{
 		return (float)self::whereType($dataType->value)->first()->data;
 	}
 
-	public static function getHighestHourlyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	public static function getHighestHourlyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float
 	{
 		$collection = collect(self::getHourlyAvg($dataType, $dateFrom, $dateTo));
 
 		return $collection->max('average');
 	}
 
-	public static function getLowestHourlyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	public static function getLowestHourlyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float
 	{
 		$collection = collect(self::getHourlyAvg($dataType, $dateFrom, $dateTo));
 
 		return $collection->min('average');
 	}
 
-	public static function getMedianHourlyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	public static function getMedianHourlyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float
 	{
 		$collection = collect(self::getHourlyAvg($dataType, $dateFrom, $dateTo));
 
@@ -70,21 +70,21 @@ class Data extends Model
 	}
 
 
-	public static function getHighestDailyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	public static function getHighestDailyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float
 	{
 		$collection = collect(self::getDailyAvg($dataType, $dateFrom, $dateTo));
 
 		return $collection->max('average');
 	}
 
-	public static function getLowestDailyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	public static function getLowestDailyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float
 	{
 		$collection = collect(self::getDailyAvg($dataType, $dateFrom, $dateTo));
 
 		return $collection->min('average');
 	}
 
-	public static function getMedianDailyValue(SensorDataTypes $dataType, Carbon $dateFrom, Carbon $dateTo) : float
+	public static function getMedianDailyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float
 	{
 		$collection = collect(self::getDailyAvg($dataType, $dateFrom, $dateTo));
 
@@ -94,32 +94,32 @@ class Data extends Model
 	/*
 	 * Hourly average helpers
 	 */
-	public static function getLastHour(SensorDataTypes $dataType): array
+	public static function getLastHour(SensorDataType $dataType): array
 	{
 		return self::getHourlyAvg($dataType, now(), now()->subHour());
 	}
 
-	public static function getLastSixHours(SensorDataTypes $dataType): array
+	public static function getLastSixHours(SensorDataType $dataType): array
 	{
 		return self::getHourlyAvg($dataType, now(), now()->subHours(6));
 	}
 
-	public static function getLastTwelveHours(SensorDataTypes $dataType): array
+	public static function getLastTwelveHours(SensorDataType $dataType): array
 	{
 		return self::getHourlyAvg($dataType, now(), now()->subHours(12));
 	}
 
-	public static function getLastTwentyFourHours(SensorDataTypes $dataType): array
+	public static function getLastTwentyFourHours(SensorDataType $dataType): array
 	{
 		return self::getHourlyAvg($dataType, now(), now()->subHours(24));
 	}
 
-	public static function getLastFortyEightHours(SensorDataTypes $dataType): array
+	public static function getLastFortyEightHours(SensorDataType $dataType): array
 	{
 		return self::getHourlyAvg($dataType, now(), now()->subHours(48));
 	}
 
-	public static function getLastSeventyTwoHours(SensorDataTypes $dataType): array
+	public static function getLastSeventyTwoHours(SensorDataType $dataType): array
 	{
 		return self::getHourlyAvg($dataType, now(), now()->subHours(72));
 	}
@@ -127,42 +127,42 @@ class Data extends Model
 	/*
 	 * Daily average helpers
 	 */
-	public static function getLastDay(SensorDataTypes $dataType): array
+	public static function getLastDay(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subDay());
 	}
 
-	public static function getLastThreeDays(SensorDataTypes $dataType): array
+	public static function getLastThreeDays(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subDays(3));
 	}
 
-	public static function getLastWeek(SensorDataTypes $dataType): array
+	public static function getLastWeek(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subWeek());
 	}
 
-	public static function getLastTwoWeeks(SensorDataTypes $dataType): array
+	public static function getLastTwoWeeks(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subWeeks(2));
 	}
 
-	public static function getLastMonth(SensorDataTypes $dataType): array
+	public static function getLastMonth(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subMonth());
 	}
 
-	public static function getLastQuarter(SensorDataTypes $dataType): array
+	public static function getLastQuarter(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subMonths(3));
 	}
 
-	public static function getLastSemester(SensorDataTypes $dataType): array
+	public static function getLastSemester(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subMonths(6));
 	}
 
-	public static function getLastYear(SensorDataTypes $dataType): array
+	public static function getLastYear(SensorDataType $dataType): array
 	{
 		return self::getDailyAvg($dataType, now(), now()->subYear());
 	}

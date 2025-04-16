@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Data;
-use App\SensorDataTypes;
+use App\SensorDataType;
 use Livewire\Component;
 use Maantje\Charts\Line\Line;
 use Maantje\Charts\Line\Lines;
@@ -28,7 +28,7 @@ class Chart extends Component
 	// IDEA: make an enum for data helper options and populate a dropdown with it, also add data type and sensor later
 	protected function generateChart(): \Maantje\Charts\Chart
 	{
-		$data = Data::getLastTwentyFourHours(SensorDataTypes::TEMPERATURE);
+		$data = Data::getLastTwentyFourHours(SensorDataType::TEMPERATURE);
 
 		$xOffset = self::$screenWidth / count($data);
 		$pointArray = [];
