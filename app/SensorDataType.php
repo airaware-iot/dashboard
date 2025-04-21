@@ -29,6 +29,16 @@ enum  SensorDataType: string
 		};
 	}
 
+	public function getIcon(): string
+	{
+		return match($this) {
+			self::TEMPERATURE 	=> 'ico-temperature.svg',
+			self::PRESSURE 		=> 'ico-pressure.svg',
+			self::HUMIDITY 		=> 'ico-humidity.svg',
+			self::LIGHTLEVEL 	=> 'ico-lightlevel.svg',
+		};
+	}
+
 	public static function getValuesArray(): array
 	{
 		return array_column(self::cases(), 'value');
