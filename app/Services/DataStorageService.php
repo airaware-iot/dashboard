@@ -20,6 +20,10 @@ class DataStorageService
 	 */
 	public static function store(Request $request): void
 	{
+		if(! $request->getContent()) {
+			throw new DataStoringException();
+		}
+
 		$data = json_decode($request->getContent(), true);
 
 		$topic = last(explode('/', $data['topic']));
