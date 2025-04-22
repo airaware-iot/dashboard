@@ -2,12 +2,21 @@
 
 namespace App;
 
+//event-count x
+//temperature x
+//illuminance x
+//relative-humidity x
+//pressure x
+//altitude x
+
 enum  SensorDataType: string
 {
+	case EVENT_COUNT = 'event-count';
     case TEMPERATURE = 'temperature';
-	case HUMIDITY = 'humidity';
-	case LIGHTLEVEL = 'light_level';
+	case HUMIDITY = 'relative-humidity';
+	case LIGHTLEVEL = 'illuminance';
 	case PRESSURE = 'pressure';
+	case ALTITUDE = 'altitude';
 
 	public function getUnit(): string
 	{
@@ -16,6 +25,8 @@ enum  SensorDataType: string
 			self::PRESSURE 		=> 'HPa',
 			self::HUMIDITY 		=> '%',
 			self::LIGHTLEVEL 	=> 'lm',
+			self::EVENT_COUNT 	=> 'x',
+			self::ALTITUDE 		=> 'm',
 		};
 	}
 
@@ -26,16 +37,21 @@ enum  SensorDataType: string
 			self::PRESSURE 		=> 'Tlak',
 			self::HUMIDITY 		=> 'Vlhkost',
 			self::LIGHTLEVEL 	=> 'Množství světla',
+			self::EVENT_COUNT 	=> 'Počet kliknutí',
+			self::ALTITUDE 		=> 'Nadmořská výška',
 		};
 	}
 
 	public function getIcon(): string
 	{
+		// TODO: finish icons
 		return match($this) {
 			self::TEMPERATURE 	=> 'ico-temperature.svg',
 			self::PRESSURE 		=> 'ico-pressure.svg',
 			self::HUMIDITY 		=> 'ico-humidity.svg',
 			self::LIGHTLEVEL 	=> 'ico-lightlevel.svg',
+			self::EVENT_COUNT 	=> 'ico-button.svg',
+			self::ALTITUDE 		=> 'ico-altitude.svg',
 		};
 	}
 
