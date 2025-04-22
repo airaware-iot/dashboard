@@ -28,7 +28,8 @@ class DataController extends Controller
 				->header('Content-Type', 'text/plain');
 		}
 
-		return response('Successfully stored data in database');
+		return response('Successfully stored data in database')
+			->header('Content-Type','text/plain');
 
 	}
 }
