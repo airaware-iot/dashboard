@@ -42,7 +42,6 @@ class ChartWidget extends Component
 	 */
 	public array $chartAnnotations = []; // TODO: finish with hygienically recommended values
 
-
 	public static int $chartWidth = 1200;
 
 	public function mount(SensorDataType $dataType, string $title = 'Chart', string $color = 'red'): void

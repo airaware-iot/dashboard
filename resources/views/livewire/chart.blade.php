@@ -1,3 +1,0 @@
-<div>
-    {{$chart->render()}}
-</div>

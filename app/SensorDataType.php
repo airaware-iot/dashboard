@@ -2,13 +2,6 @@
 
 namespace App;
 
-//event-count x
-//temperature x
-//illuminance x
-//relative-humidity x
-//pressure x
-//altitude x
-
 enum  SensorDataType: string
 {
 	case EVENT_COUNT = 'event-count';
@@ -24,9 +17,25 @@ enum  SensorDataType: string
 			self::TEMPERATURE 	=> '˚C',
 			self::PRESSURE 		=> 'HPa',
 			self::HUMIDITY 		=> '%',
-			self::LIGHTLEVEL 	=> 'lm',
+			self::LIGHTLEVEL 	=> 'lux',
 			self::EVENT_COUNT 	=> 'x',
 			self::ALTITUDE 		=> 'm',
+		};
+	}
+
+	public function getSpecs(): array
+	{
+		return match($this) {
+			self::TEMPERATURE 	=> ['type' => SpecificationType::MINMAX, 'min' => 20, 'max' => 28],
+			self::PRESSURE 		=> ['type' => SpecificationType::MINMAX, 'min' => 96325, 'max' => 106325],
+			self::HUMIDITY 		=> ['type' => SpecificationType::MINMAX, 'min' => 30, 'max' => 65],
+			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => [
+				'Čtení a psaní' => 500,
+				'Technické kreslení' => 750
+			]],
+
+			self::EVENT_COUNT,
+			self::ALTITUDE 		=> ['type' => SpecificationType::NULL],
 		};
 	}
 
@@ -52,6 +61,18 @@ enum  SensorDataType: string
 			self::LIGHTLEVEL 	=> 'ico-lightlevel.svg',
 			self::EVENT_COUNT 	=> 'ico-button.svg',
 			self::ALTITUDE 		=> 'ico-altitude.svg',
+		};
+	}
+
+	public function getColor(): string
+	{
+		return match($this) {
+			self::TEMPERATURE 	=> '#FF5733',  // Warm orange-red
+			self::PRESSURE 		=> '#3498DB',  // Calm blue
+			self::HUMIDITY 		=> '#1ABC9C',  // Fresh green
+			self::LIGHTLEVEL 	=> '#F1C40F',  // Bright yellow
+			self::EVENT_COUNT 	=> '#9B59B6',  // Purple
+			self::ALTITUDE 		=> '#2C3E50',  // Deep navy blue
 		};
 	}
 
