@@ -8,6 +8,7 @@ use App\Services\DataAggregationService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Data extends Model
 {
@@ -45,7 +46,11 @@ class Data extends Model
 	 */
 	public static function getLatestValue(SensorDataType $dataType): float
 	{
-		return (float)self::whereType($dataType->value)->first()->data;
+		$value = self::whereType($dataType->value)->first();
+
+		if($value) return $value->data;
+		else return -1;
+
 	}
 
 	public static function getHighestHourlyValue(SensorDataType $dataType, Carbon $dateFrom, Carbon $dateTo) : float

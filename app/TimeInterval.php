@@ -6,18 +6,18 @@ use App\Models\Data;
 
 enum TimeInterval: string
 {
-	case LAST_SIX_HOURS = 'Last 6 Hours';
-	case LAST_TWELVE_HOURS = 'Last 12 Hours';
-	case LAST_TWENTY_FOUR_HOURS = 'Last 24 Hours';
-	case LAST_FORTY_EIGHT_HOURS = 'Last 48 Hours';
-	case LAST_SEVENTY_TWO_HOURS = 'Last 72 Hours';
-	case LAST_THREE_DAYS = 'Last 3 Days';
-	case LAST_WEEK = 'Last Week';
-	case LAST_TWO_WEEKS = 'Last 2 Weeks';
-	case LAST_MONTH = 'Last Month';
-	case LAST_QUARTER = 'Last Quarter';
-	case LAST_SEMESTER = 'Last Semester';
-	case LAST_YEAR = 'Last Year';
+	case LAST_SIX_HOURS = 'Posledních 6 hodin';
+	case LAST_TWELVE_HOURS = 'Posledních 12 hodin';
+	case LAST_TWENTY_FOUR_HOURS = 'Posledních 24 hodin';
+	case LAST_FORTY_EIGHT_HOURS = 'Posledních 48 hodin';
+	case LAST_SEVENTY_TWO_HOURS = 'Posledních 72 hodin';
+	case LAST_THREE_DAYS = 'Poslední 3 dny';
+	case LAST_WEEK = 'Poslední týden';
+	case LAST_TWO_WEEKS = 'Poslední dva týdny';
+	case LAST_MONTH = 'Poslední měsíc';
+	case LAST_QUARTER = 'Poslední čtvrtletí';
+	case LAST_SEMESTER = 'Poslední pololetí';
+	case LAST_YEAR = 'Poslední rok';
 
 	public function getData(SensorDataType $dataType): array
 	{

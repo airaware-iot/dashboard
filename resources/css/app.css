@@ -11,6 +11,7 @@
 }
 
 body {
-    background: url('/public/bg.png');
+    /*background: url('/public/bg.png');*/
     filter: blur(10);
+    @apply bg-gray-200
 }

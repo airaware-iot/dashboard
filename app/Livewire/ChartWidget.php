@@ -8,17 +8,6 @@ use Livewire\Component;
 
 class ChartWidget extends Component
 {
-	/*
-	 * TODO LIST
-	 *
-	 * - finish sensor "scoping"
-	 * - create chart annotations for hygienically recommended values
-	 * - fix DataAggregationService always provide the right amount of values (e.g. 24h = 24x) - just iterate remainder
-	 * - fix the broken X axis - should show date(time) =
-	 * probably a custom method that creates short human readable version (like -1d or -1h or something like that)
-	 */
-
-	// public Sensors $sensors; TODO
 	public SensorDataType $selectedDataType;
 	public TimeInterval $selectedTimeInterval;
 
@@ -42,17 +31,19 @@ class ChartWidget extends Component
 	 */
 	public array $chartAnnotations = []; // TODO: finish with hygienically recommended values
 
-	public static int $chartWidth = 1200;
+	public static int $chartWidth = 800;
 
-	public function mount(SensorDataType $dataType, string $title = 'Chart', string $color = 'red'): void
+	public function mount(SensorDataType $dataType, string $title = 'Chart', ?string $color = null): void
 	{
 		// Attributes
 		$this->selectedDataType = $dataType;
 		$this->chartTitle = $title;
-		$this->chartColor = $color;
+
+		if(! $color) $this->chartColor = $dataType->getColor();
+		else $this->chartColor = $color;
 
 		// Default values
-		$this->selectedTimeInterval ??= TimeInterval::LAST_TWENTY_FOUR_HOURS;
+		$this->selectedTimeInterval ??= TimeInterval::LAST_TWELVE_HOURS;
 
 		// Setup chart data
 		$this->setChartData();
@@ -84,8 +75,8 @@ class ChartWidget extends Component
 	{
 		$data = collect($this->chartData);
 
-		$this->chartMinValue = floor($data->min('value'));
-		$this->chartMaxValue = ceil($data->max('value'));
+		$this->chartMinValue = min(floor($data->min('value')), $this->selectedDataType->getSpecsMinMax()['min']);
+		$this->chartMaxValue = max(ceil($data->max('value')), $this->selectedDataType->getSpecsMinMax()['max']);
 	}
 
 	protected function setChartYAxisUnit(): void

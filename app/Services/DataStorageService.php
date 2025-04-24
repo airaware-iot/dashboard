@@ -42,6 +42,9 @@ class DataStorageService
 			throw new InvalidValueException($value);
 		}
 
+		if($topic === 'pressure') {
+			$value = round($value / 100, precision: 2);
+		}
 		try {
 			\DB::transaction(function () use ($topic, $value) {
 				Data::create([

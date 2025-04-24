@@ -2,7 +2,9 @@
 
 namespace App;
 
-enum  SensorDataType: string
+use App\Models\Data;
+
+enum SensorDataType: string
 {
 	case EVENT_COUNT = 'event-count';
     case TEMPERATURE = 'temperature';
@@ -10,6 +12,7 @@ enum  SensorDataType: string
 	case LIGHTLEVEL = 'illuminance';
 	case PRESSURE = 'pressure';
 	case ALTITUDE = 'altitude';
+	case CO2 = 'co2';
 
 	public function getUnit(): string
 	{
@@ -20,6 +23,7 @@ enum  SensorDataType: string
 			self::LIGHTLEVEL 	=> 'lux',
 			self::EVENT_COUNT 	=> 'x',
 			self::ALTITUDE 		=> 'm',
+			self::CO2			=> 'ppm',
 		};
 	}
 
@@ -27,15 +31,47 @@ enum  SensorDataType: string
 	{
 		return match($this) {
 			self::TEMPERATURE 	=> ['type' => SpecificationType::MINMAX, 'min' => 20, 'max' => 28],
-			self::PRESSURE 		=> ['type' => SpecificationType::MINMAX, 'min' => 96325, 'max' => 106325],
+			self::PRESSURE 		=> ['type' => SpecificationType::MINMAX, 'min' => 963.25, 'max' => 1063.25],
 			self::HUMIDITY 		=> ['type' => SpecificationType::MINMAX, 'min' => 30, 'max' => 65],
-			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => [
-				'Čtení a psaní' => 500,
-				'Technické kreslení' => 750
+			self::CO2			=> ['type' => SpecificationType::MANY, 'entries' => [
+				'oxidu uhličitého' => 900,
 			]],
-
+			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => [
+				'čtení a psaní' => 500,
+				'technické kreslení' => 750
+			]],
 			self::EVENT_COUNT,
 			self::ALTITUDE 		=> ['type' => SpecificationType::NULL],
+		};
+	}
+	public function getSpecsMinMax(): array
+	{
+		return match ($this) {
+			self::TEMPERATURE, self::PRESSURE, self::HUMIDITY => [
+				'min' => $this->getSpecs()['min'] * 0.9,
+				'max' => $this->getSpecs()['max'] * 1.1,
+			],
+			self::CO2, self::LIGHTLEVEL => [
+				'min' => min($this->getSpecs()['entries']) * 0.9,
+				'max' => max($this->getSpecs()['entries']) * 1.1,
+			],
+			default => [
+				'min' => null,
+				'max' => null,
+			]
+		};
+	}
+
+	public function getSpecLabel()
+	{
+		return match($this) {
+			self::TEMPERATURE 	=> 'Doporučená teplota ',
+			self::PRESSURE 		=> 'Doporučený tlak ',
+			self::HUMIDITY 		=> 'Doporučená vlhkost ',
+			self::LIGHTLEVEL 	=> 'Doporučená úroveň osvětlení pro ',
+			self::EVENT_COUNT 	=> 'Počet kliknutí ',
+			self::ALTITUDE 		=> 'Nadmořská výška ',
+			self::CO2 			=> 'Maximální množství '
 		};
 	}
 
@@ -48,6 +84,7 @@ enum  SensorDataType: string
 			self::LIGHTLEVEL 	=> 'Množství světla',
 			self::EVENT_COUNT 	=> 'Počet kliknutí',
 			self::ALTITUDE 		=> 'Nadmořská výška',
+			self::CO2 			=> 'Oxid uhličitý'
 		};
 	}
 
@@ -73,7 +110,13 @@ enum  SensorDataType: string
 			self::LIGHTLEVEL 	=> '#F1C40F',  // Bright yellow
 			self::EVENT_COUNT 	=> '#9B59B6',  // Purple
 			self::ALTITUDE 		=> '#2C3E50',  // Deep navy blue
+			self::CO2			=> '#1E1E1E',  // Dark gray
 		};
+	}
+
+	public function getLatest(): int|float
+	{
+		return Data::getLatestValue($this);
 	}
 
 	public static function getValuesArray(): array

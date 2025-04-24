@@ -18,7 +18,8 @@ class GraphSpecVisualiserService
 			y1: $this->type->getSpecs()['min'],
 			y2: $this->type->getSpecs()['max'],
 			color: $this->type->getColor(),
-			label: "Doporučená {$this->type->getLabel()}",
+			label: $this->type->getSpecLabel(),
+
 
 		)];
 	}
@@ -34,7 +35,7 @@ class GraphSpecVisualiserService
 				color: $this->type->getColor(),
 				size: 3,
 //				dash: '20,20',
-				label: "Minimum pro $key",
+				label: $this->type->getSpecLabel() . $key,
 //				textLeftMargin: 3
 			);
 		}

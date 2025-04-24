@@ -15,23 +15,28 @@
     use Maantje\Charts\YAxis;
 	use App\Services\GraphSpecVisualiserService;
 @endphp
-
-<div class="p-4 border-red-500">
-    <select wire:change="updateTimeInterval($event.target.value)">
-        @foreach(TimeInterval::cases() as $option)
-            <option
-                value="{{$option->value}}"
-                {{$selectedTimeInterval->value == $option->value ? 'selected' : ''}}
-            >
-                {{$option->value}}
-            </option>
-        @endforeach
-    </select>
-    {{$selectedTimeInterval->value}}
-    
+{{--<script>--}}
+{{--    console.log(window.innerWidth)--}}
+{{--</script>--}}
+<div class="p-6 bg-white rounded-2xl" wire:poll.15s>
+    <div class="mb-4">
+        <h2 class="font-semibold text-xl">{{$chartYAxisTitle}}</h2>
+        <select wire:change="updateTimeInterval($event.target.value)">
+            @foreach(TimeInterval::cases() as $option)
+                <option
+                    value="{{$option->value}}"
+                    {{$selectedTimeInterval->value == $option->value ? 'selected' : ''}}
+                >
+                    {{$option->value}}
+                </option>
+            @endforeach
+        </select>
+        @if(! $chartData)
+            <p class="py-1 px-3 bg-red-200 text-red-500 rounded-lg inline-block mb-6">Žádná data pro daný interval</p>
+        @endif
+    </div>
     <div>
 @php
-if (! $chartData) echo 'no data'; // TODO: handle this correctly
 
 $pointArray = [];
 
@@ -44,7 +49,6 @@ foreach ($chartData as $point)
     $counter++;
 }
 
-bg-red
 $chart = new Chart(
     width: \App\Livewire\ChartWidget::$chartWidth,
     yAxis: [
@@ -53,10 +57,9 @@ $chart = new Chart(
             title: $chartYAxisTitle,
             minValue: $chartMinValue,
             maxValue: $chartMaxValue,
-            color: $chartColor,
             annotations: (new GraphSpecVisualiserService($selectedDataType))
                 ->getYAxisAnnotations(),
-            labelMargin: 10,
+            labelMargin: 30,
             formatter: Formatter::template(":value $chartYAxisUnit"),
         ),
     ],
@@ -67,7 +70,7 @@ $chart = new Chart(
 			    ? count($chartData)
 			    : 0;
 			
-			$label = "-$xAxisCounter d";
+			$label = "-$xAxisCounter h";
 			$xAxisCounter--;
 			
 			return $label;
@@ -78,8 +81,9 @@ $chart = new Chart(
             lines: [
                 new Line(
                     points: $pointArray,
-                    yAxis: strtolower($chartYAxisTitle),
-                    color: $chartColor,
+					size: 4,
+					yAxis: strtolower($chartYAxisTitle),
+					color: $chartColor,
                 ),
             ]
         ),
@@ -89,4 +93,9 @@ $chart = new Chart(
         
         {!! $chart->render() !!}
     </div>
+    
+    <script>
+        console.log(window.innerWidth)
+    
+    </script>
 </div>
