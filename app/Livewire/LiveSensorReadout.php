@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\SensorDataType;
+use App\Enums\SensorDataType;
 use Livewire\Component;
 
 class LiveSensorReadout extends Component

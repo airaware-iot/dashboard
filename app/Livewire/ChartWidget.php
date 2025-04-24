@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\SensorDataType;
-use App\TimeInterval;
+use App\Enums\SensorDataType;
+use App\Enums\TimeInterval;
 use Livewire\Component;
 
 class ChartWidget extends Component

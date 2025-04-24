@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\SensorDataType;
-use App\SpecificationType;
+use App\Enums\SensorDataType;
+use App\Enums\SpecificationType;
 use Maantje\Charts\Annotations\YAxis\YAxisLineAnnotation;
 use Maantje\Charts\Annotations\YAxis\YAxisRangeAnnotation;
 

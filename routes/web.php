@@ -1,10 +1,6 @@
 <?php
 
 use App\Http\Controllers\DataController;
-use App\Models\Data;
-use App\SensorDataType;
-use App\Services\GraphSpecVisualiserService;
-use App\SpecificationType;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use const App\Services\GraphSpecVisualiserService;

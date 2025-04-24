@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Enums\SensorDataType;
 use App\Exceptions\DataStoringException;
 use App\Exceptions\InvalidTopicException;
 use App\Exceptions\InvalidValueException;
 use App\Models\Data;
-use App\SensorDataType;
 use Illuminate\Http\Request;
 use Log;
 use Throwable;

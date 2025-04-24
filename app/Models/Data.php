@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\AggregationInterval;
-use App\SensorDataType;
+use App\Enums\AggregationInterval;
+use App\Enums\SensorDataType;
 use App\Services\DataAggregationService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Data extends Model
 {

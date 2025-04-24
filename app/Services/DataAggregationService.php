@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\AggregationInterval;
+use App\Enums\AggregationInterval;
+use App\Enums\SensorDataType;
 use App\Exceptions\AggregationException;
 use App\Models\Data;
-use App\SensorDataType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
