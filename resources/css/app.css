@@ -6,12 +6,33 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-turqoise-background: #0C1D1D;
+    --color-turqoise-foreground: #102828;
+    --color-turqoise-main: #3f9897;
+    --color-turqoise-dock: #113B3B99;
+
+    --color-complementary: #FFE66D;
+    --color-gray-body: #C0C0C0;
+
+    --color-datatype-temperature: #E79446;
+    --color-datatype-humidity: #8CD790;
+    --color-datatype-lightlevel: #58A4B0;
+    --color-datatype-pressure: #F9B4ED;
+    --color-datatype-co2: #533E2D;
+
+    /*
+    case TEMPERATURE = 'temperature';
+    case HUMIDITY = 'relative-humidity';
+    case LIGHTLEVEL = 'illuminance';
+    case PRESSURE = 'pressure';
+    case CO2 = 'co2';
+    */
+
 }
 
 body {
-    /*background: url('/public/bg.png');*/
     filter: blur(10);
     @apply bg-gray-200
 }
