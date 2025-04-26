@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{$title}}</title>
 </head>
-<body class="h-full p-8 bg-slate-700 grid gap-8">
+<body class="h-full p-8 bg-turqoise-background grid gap-8">
     <main class="h-full p-6  rounded-2xl overflow-y-auto">
         {{$slot}}
     </main>

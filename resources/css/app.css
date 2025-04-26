@@ -11,8 +11,7 @@
     --color-turqoise-background: #0C1D1D;
     --color-turqoise-foreground: #102828;
     --color-turqoise-main: #3f9897;
-    --color-turqoise-dock: #113B3B99;
-
+    --color-turqoise-dock: #113B3B;
     --color-complementary: #FFE66D;
     --color-gray-body: #C0C0C0;
 
@@ -30,9 +29,4 @@
     case CO2 = 'co2';
     */
 
-}
-
-body {
-    filter: blur(10);
-    @apply bg-gray-200
 }

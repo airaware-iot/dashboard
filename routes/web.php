@@ -6,11 +6,20 @@ use Illuminate\Support\Facades\Route;
 use const App\Services\GraphSpecVisualiserService;
 
 Route::get('/test', function() {
-//	dd(\App\Services\DataAggTyperegationService::getDataPointsCount(\App\AggregationOptions::HOURLY, now(), now()->subDays(2)));
-//	dd(Data::getMinutesAvg(SensorDataType::TEMPERATURE, now(), now()->subMinutes(100)));
-//	dd((new GraphSpecVisualiserService(SensorDataType::LIGHTLEVEL))->getYAxisAnnotations());
-//	dd(SensorDataType::TEMPERATURE->getLatest());
+
 });
+
+Route::view('/', 'app.overview')->name('index');
+Route::view('/databaze', 'app.database')->name('database');
+Route::view('/dokumenty', 'app.docs')->name('docs');
+Route::view('/doporuceni', 'app.tips')->name('tips');
+Route::view('/nastaveni', 'app.settings')->name('settings');
+
+
+
+
+
+Route::view('/testview', 'app.test')->name('test');
 
 Route::prefix('/api/v1')->withoutMiddleware(VerifyCsrfToken::class)->group(function () {
 	Route::post('/data', DataController::class)->name('data');
@@ -19,10 +28,6 @@ Route::prefix('/api/v1')->withoutMiddleware(VerifyCsrfToken::class)->group(funct
 Route::get('/devices/add', [DeviceController::class, 'index']);
 //Route::post('devices/add', [])
 
-
-Route::get('/', function () {
-    return view('app.welcome');
-});
 
 
 // Dashboard
