@@ -114,9 +114,38 @@ enum SensorDataType: string
 		};
 	}
 
-	public function getLatest(): int|float
+	public function getLighthouseValues(): array
 	{
-		return Data::getLatestValue($this);
+		return match($this) {
+			self::TEMPERATURE  => [
+				'limit_high' => 28,
+				'limit_low' => 20,
+			],
+			self::PRESSURE => [
+				'limit_high' => 1063.25,
+				'limit_low' => 963.25,
+			],
+			self::HUMIDITY => [
+				'limit_high' => 999999,
+				'limit_low' => 30,
+			],
+			self::CO2 => [
+				'limit_high' => 900,
+				'limit_low' => -999999,
+			],
+			self::LIGHTLEVEL => [
+				'limit_high' => 999999,
+				'limit_low' => 500,
+			],
+			self::EVENT_COUNT,
+			self::ALTITUDE => null,
+		};
+
+	}
+
+	public function getLatest(): int|string
+	{
+		return Data::getLatestValue($this) ?? '?';
 	}
 
 	public static function getValuesArray(): array

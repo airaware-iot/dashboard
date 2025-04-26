@@ -43,12 +43,13 @@ class Data extends Model
 	/*
 	 * Statistical average helpers
 	 */
-	public static function getLatestValue(SensorDataType $dataType): float
+	public static function getLatestValue(SensorDataType $dataType): ?float
 	{
-		$value = self::whereType($dataType->value)->first();
+		$value = self::whereType($dataType->value)
+			->where('timestamp', '>=', now()->subMinutes(60))->first();
 
 		if($value) return $value->data;
-		else return -1;
+		else return null;
 
 	}
 
