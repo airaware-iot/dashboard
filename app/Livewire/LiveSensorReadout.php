@@ -8,26 +8,38 @@ use Livewire\Component;
 class LiveSensorReadout extends Component
 {
 	public SensorDataType $dataType;
-	public $statusColor;
+	public string $statusColor;
+	public int|float|string $value;
 
 	public function mount(SensorDataType $dataType): void
 	{
 		$this->dataType = $dataType;
+		$this->update();
+	}
 
-		$value = $this->dataType->getLatest();
+	public function update(): void
+	{
+		$this->updateValue();
+		$this->updateColor();
+	}
+	protected function updateColor(): void
+	{
+		$value = $this->value;
 		$limits =  $this->dataType->getLighthouseValues();
 
-		if($value == '?') {
+		if($value == '? ') { // No recent data found
 			$this->statusColor = 'bg-gray-500';
 		}
-		else if($value <= $limits['limit_high'] && $value >= $limits['limit_low']) {
+		else if($value <= $limits['limit_high'] && $value >= $limits['limit_low']) { // Is within limits
 			$this->statusColor = 'bg-green-500';
 		}
-		else {
+		else { // Outside of limits
 			$this->statusColor = 'bg-red-500';
 		}
-
-		// If within 10% of min or max, make it yellow, else when
+	}
+	protected function updateValue(): void
+	{
+		$this->value = $this->dataType->getLatest();
 	}
 
     public function render()

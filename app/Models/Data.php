@@ -46,7 +46,9 @@ class Data extends Model
 	public static function getLatestValue(SensorDataType $dataType): ?float
 	{
 		$value = self::whereType($dataType->value)
-			->where('timestamp', '>=', now()->subMinutes(60))->first();
+			->where('timestamp', '>=', now()->subMinutes(60))
+			->latest()
+			->first();
 
 		if($value) return $value->data;
 		else return null;

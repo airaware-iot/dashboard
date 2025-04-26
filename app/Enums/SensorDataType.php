@@ -143,9 +143,9 @@ enum SensorDataType: string
 
 	}
 
-	public function getLatest(): int|string
+	public function getLatest(): int|string|float
 	{
-		return Data::getLatestValue($this) ?? '?';
+		return Data::getLatestValue($this) ?? '? ';
 	}
 
 	public static function getValuesArray(): array
