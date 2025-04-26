@@ -62,7 +62,7 @@ enum SensorDataType: string
 		};
 	}
 
-	public function getSpecLabel()
+	public function getSpecLabel(): string
 	{
 		return match($this) {
 			self::TEMPERATURE 	=> 'Doporučená teplota ',
