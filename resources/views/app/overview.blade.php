@@ -1,8 +1,8 @@
 <x-layout.layout title="Přehled">
-    <div class="w-full grid md:grid-cols-2 grid-cols-1 md:items-center md:mb-10 mb-6 gap-4">
+    <div class="w-full grid md:grid-cols-2 grid-cols-1 md:items-center md:mb-8 mb-6 gap-4">
         <div class="max-md:row-start-2 ">
-            <h1 class="text-white text-3xl font-medium mb-1">Dobré odpoledne</h1>
-            <p class="text-gray-body">Zde je váš přehled ovzduší</p>
+            <h1 class="text-white text-3xl font-medium mb-1">{{\App\Services\GreetingService::getGreeting()}}</h1>
+            <p class="text-gray-body">Zde je váš komplexní přehled ovzduší od <b class="font-semibold">AirAware</b></p>
         </div>
         <div>
             <x-logo-full class="h-8 max-md:hidden md:ml-auto"/>
