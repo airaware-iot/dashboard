@@ -10,7 +10,8 @@ use Maantje\Charts\Annotations\YAxis\YAxisRangeAnnotation;
 class GraphSpecVisualiserService
 {
 	public function __construct(
-		public SensorDataType $type
+		public SensorDataType $type,
+		public bool $compact = false
 	) {}
 	protected function minmax()
 	{
@@ -18,8 +19,10 @@ class GraphSpecVisualiserService
 			y1: $this->type->getSpecs()['min'],
 			y2: $this->type->getSpecs()['max'],
 			color: 'var(--color-complementary)',
+			fontSize: $this->compact ? 0 : null,
 			label: $this->type->getSpecLabel(),
 			labelColor: 'var(--color-black)',
+			labelBackgroundColor: $this->compact ? 'var(--color-clear)' : '',
 
 
 		)];
@@ -35,10 +38,10 @@ class GraphSpecVisualiserService
 				y: $value,
 				color: 'var(--color-complementary)',
 				size: 3,
-//				dash: '20,20',
+				fontSize: $this->compact ? 0 : null,
 				label: $this->type->getSpecLabel() . $key,
 				labelColor: 'var(--color-black)',
-//				textLeftMargin: 3
+				labelBackgroundColor: $this->compact ? 'var(--color-clear)' : '',
 			);
 		}
 		return $lines;

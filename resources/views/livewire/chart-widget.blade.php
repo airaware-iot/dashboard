@@ -57,7 +57,7 @@
 						minValue: $chartMinValue,
 						maxValue: $chartMaxValue,
 						color: 'var(--color-gray-body)',
-						annotations: (new GraphSpecVisualiserService($selectedDataType))
+						annotations: (new GraphSpecVisualiserService($selectedDataType, $compact))
 							->getYAxisAnnotations(),
 						fontSize: $compact ? 0 : 14,
 						labelMargin: $compact ? 0 : 30,

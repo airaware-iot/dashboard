@@ -16,11 +16,11 @@
         <livewire:live-sensor-readout :data-type="\App\Enums\SensorDataType::CO2"/>
         <livewire:live-sensor-readout :data-type="\App\Enums\SensorDataType::LIGHTLEVEL"/>
     </div>
-    <div class="w-full grid grid-cols-2 grid-rows-2 gap-6 mb-8">
+    <div class="w-full grid grid-cols-[2fr_3fr] grid-rows-2 gap-6 mb-8">
         <div>
             <livewire:recommendations-widget/>
         </div>
-        <div>
+        <div class="grid grid-cols-2 gap-6">
             <livewire:chart-widget
                 compact
                 :data-type="\App\Enums\SensorDataType::TEMPERATURE"
