@@ -87,7 +87,7 @@ enum SensorDataType: string
 		};
 	}
 
-	public function getLighthouseValues(): array
+	public function getSpecsAsSimpleArray(): ?array
 	{
 		return match($this) {
 			self::TEMPERATURE  => [
@@ -99,7 +99,7 @@ enum SensorDataType: string
 				'limit_low' => 963.25,
 			],
 			self::HUMIDITY => [
-				'limit_high' => 999999,
+				'limit_high' => 65,
 				'limit_low' => 30,
 			],
 			self::CO2 => [
@@ -107,14 +107,41 @@ enum SensorDataType: string
 				'limit_low' => -999999,
 			],
 			self::LIGHTLEVEL => [
-				'limit_high' => 999999,
+				'limit_high' => 3000,
 				'limit_low' => 500,
 			],
 			self::EVENT_COUNT,
 			self::ALTITUDE => null,
 		};
-
 	}
+
+	public function getRecommendationMessage(): ?array
+	{
+		return match($this) {
+			self::TEMPERATURE => [
+				'min' => '<span class="text-complementary">Příliš nízká teplota <b class="text-semibold">SETDATA</b></span> . Zkuste přitopit nebo se tepleji obléknout.',
+				'max' => '<span class="text-complementary">Příliš vysoká teplota <b class="text-semibold">SETDATA</b></span> . Zkuste zapnout klimatizaci nebo vyvětrat.'
+			],
+			self::PRESSURE => [
+				'min' => '<span class="text-complementary">Příliš nízký tlak <b class="text-semibold">SETDATA</b></span> . Může se projevit únava.',
+				'max' => '<span class="text-complementary">Příliš vysoký tlak <b class="text-semibold">SETDATA</b></span> . Sledujte svůj zdravotní stav.'
+			],
+			self::HUMIDITY => [
+				'min' => '<span class="text-complementary">Příliš nízká vlhkost <b class="text-semibold">SETDATA</b></span> . Zvažte použití zvlhčovače.',
+				'max' => '<span class="text-complementary">Příliš vysoká vlhkost <b class="text-semibold">SETDATA</b></span> . Vyvětrejte nebo použijte odvlhčovač.'
+			],
+			self::LIGHTLEVEL => [
+				'min' => '<span class="text-complementary">Příliš slabé osvětlení <b class="text-semibold">SETDATA</b></span> . Zkuste rozsvítit více osvětlení v místnosti.',
+				'max' => '<span class="text-complementary">Příliš silné osvětlení <b class="text-semibold">SETDATA</b></span> . Dlouhodobě velmi silné světlo může poškodit vidění. Doporučujeme ztlumit světla v místnosti.'
+			],
+			self::CO2 => [
+				'min' => null,
+				'max' => '<span class="text-complementary">Koncentrace CO₂ je příliš vysoká (<b class="text-semibold">SETDATA</b>)</span>. Vyvětrejte místnost.'
+			],
+			self::EVENT_COUNT, self::ALTITUDE => null,
+		};
+	}
+
 
 	public function getLatest(): int|string|float
 	{

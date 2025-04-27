@@ -67,6 +67,13 @@ class ChartWidget extends Component
 		return view('livewire.chart-widget');
 	}
 
+	public function update(): void
+	{
+		$this->setChartData();
+		$this->setChartMinMaxValues();
+		$this->setXOffset();
+
+	}
 	public function updateTimeInterval($interval): void
 	{
 		$this->selectedTimeInterval = TimeInterval::from($interval);

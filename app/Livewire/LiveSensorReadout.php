@@ -25,7 +25,7 @@ class LiveSensorReadout extends Component
 	protected function updateColor(): void
 	{
 		$value = $this->value;
-		$limits =  $this->dataType->getLighthouseValues();
+		$limits =  $this->dataType->getSpecsAsSimpleArray();
 
 		if($value == '? ') { // No recent data found
 			$this->statusColor = 'bg-gray-500';

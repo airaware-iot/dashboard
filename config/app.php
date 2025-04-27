@@ -123,4 +123,12 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+	/*
+	 * App settings
+	 */
+	'default_values' => [
+		'polling_rate_fast' => '500ms',
+		'polling_rate_slow' => '120s'
+	]
+
 ];

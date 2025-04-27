@@ -12,7 +12,7 @@
 {{--<script>--}}
 {{--    console.log(window.innerWidth)--}}
 {{--</script>--}}
-<div class="p-6 bg-turquoise-foreground rounded-2xl" wire:poll.15s>
+<div class="p-6 bg-turquoise-foreground rounded-2xl" wire:poll.{{config('app.default_values.polling_rate_slow')}}="update">
     <div class="mb-4">
         <h2 class="font-semibold text-xl text-white">{{$chartYAxisTitle}}</h2>
         <select wire:change="updateTimeInterval($event.target.value)" class="text-gray-body">
@@ -69,7 +69,7 @@
                             ? count($chartData)
                             : 0;
 
-                        $label = "-$xAxisCounter"."$chartXAxisUnit";
+                        $label = "-$xAxisCounter"."  $chartXAxisUnit";
                         $xAxisCounter--;
 
                         return $label;
