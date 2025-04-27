@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Carbon\Carbon;
-
 class GreetingService
 {
 	public static function getGreeting(): string
