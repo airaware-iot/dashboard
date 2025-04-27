@@ -33,13 +33,8 @@ enum SensorDataType: string
 			self::TEMPERATURE 	=> ['type' => SpecificationType::MINMAX, 'min' => 20, 'max' => 28],
 			self::PRESSURE 		=> ['type' => SpecificationType::MINMAX, 'min' => 963.25, 'max' => 1063.25],
 			self::HUMIDITY 		=> ['type' => SpecificationType::MINMAX, 'min' => 30, 'max' => 65],
-			self::CO2			=> ['type' => SpecificationType::MANY, 'entries' => [
-				'oxidu uhličitého' => 900,
-			]],
-			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => [
-				'čtení a psaní' => 500,
-				'technické kreslení' => 750
-			]],
+			self::CO2			=> ['type' => SpecificationType::MANY, 'entries' => ['oxidu uhličitého' => 900,]],
+			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => ['čtení a psaní' => 500, 'technické kreslení' => 750]],
 			self::EVENT_COUNT,
 			self::ALTITUDE 		=> ['type' => SpecificationType::NULL],
 		};
@@ -47,18 +42,9 @@ enum SensorDataType: string
 	public function getSpecsMinMax(): array
 	{
 		return match ($this) {
-			self::TEMPERATURE, self::PRESSURE, self::HUMIDITY => [
-				'min' => $this->getSpecs()['min'] * 0.9,
-				'max' => $this->getSpecs()['max'] * 1.1,
-			],
-			self::CO2, self::LIGHTLEVEL => [
-				'min' => min($this->getSpecs()['entries']) * 0.9,
-				'max' => max($this->getSpecs()['entries']) * 1.1,
-			],
-			default => [
-				'min' => null,
-				'max' => null,
-			]
+			self::TEMPERATURE, self::PRESSURE, self::HUMIDITY => ['min' => $this->getSpecs()['min'] * 0.9, 'max' => $this->getSpecs()['max'] * 1.1],
+			self::CO2, self::LIGHTLEVEL => ['min' => min($this->getSpecs()['entries']) * 0.9, 'max' => max($this->getSpecs()['entries']) * 1.1],
+			default => ['min' => null, 'max' => null]
 		};
 	}
 
@@ -85,19 +71,6 @@ enum SensorDataType: string
 			self::EVENT_COUNT 	=> 'Počet kliknutí',
 			self::ALTITUDE 		=> 'Nadmořská výška',
 			self::CO2 			=> 'Oxid uhličitý'
-		};
-	}
-
-	public function getIcon(): string
-	{
-		// TODO: finish icons
-		return match($this) {
-			self::TEMPERATURE 	=> 'ico-temperature.svg',
-			self::PRESSURE 		=> 'ico-pressure.svg',
-			self::HUMIDITY 		=> 'ico-humidity.svg',
-			self::LIGHTLEVEL 	=> 'ico-lightlevel.svg',
-			self::EVENT_COUNT 	=> 'ico-button.svg',
-			self::ALTITUDE 		=> 'ico-altitude.svg',
 		};
 	}
 

@@ -2,7 +2,7 @@
     <div class="w-full grid md:grid-cols-2 grid-cols-1 md:items-center md:mb-8 mb-6 gap-4">
         <div class="max-md:row-start-2 ">
             <h1 class="text-white text-3xl font-medium mb-1">{{\App\Services\GreetingService::getGreeting()}}</h1>
-            <p class="text-gray-body">Zde je váš komplexní přehled ovzduší od <b class="font-semibold">AirAware</b></p>
+            <p class="text-gray-body">Zde je váš komplexní přehled ovzduší od <b class="font-semibold">AirAware</b>.</p>
         </div>
         <div>
             <x-logo-full class="h-8 max-md:hidden md:ml-auto"/>
@@ -18,6 +18,7 @@
     </div>
     <div class="w-full grid grid-cols-2 grid-rows-2 gap-6 mb-8">
         <livewire:chart-widget
+            compact
             :data-type="\App\Enums\SensorDataType::TEMPERATURE"
         />
         <livewire:chart-widget

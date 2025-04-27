@@ -4,17 +4,19 @@ namespace App\Livewire;
 
 use App\Enums\SensorDataType;
 use App\Enums\TimeInterval;
+use App\Models\Data;
 use Livewire\Component;
 
 class ChartWidget extends Component
 {
 	public SensorDataType $selectedDataType;
 	public TimeInterval $selectedTimeInterval;
+	public bool $compact;
 
 	public string $chartTitle;
 	public string $chartColor;
-	public string $chartXAxisTitle = 'Doba';
-	public string $chartXAxisUnit = '';
+	public string $chartXAxisTitle = 'Čas';
+	public string $chartXAxisUnit = 'g';
 	public string $chartXOffset;
 	public string $chartYAxisTitle;
 	public string $chartYAxisUnit;
@@ -33,11 +35,17 @@ class ChartWidget extends Component
 
 	public static int $chartWidth = 800;
 
-	public function mount(SensorDataType $dataType, string $title = 'Chart', ?string $color = null): void
+	public function mount(
+		SensorDataType $dataType,
+		bool $compact = false,
+		string $title = 'Chart',
+		?string $color = null
+	): void
 	{
 		// Attributes
 		$this->selectedDataType = $dataType;
 		$this->chartTitle = $title;
+		$this->compact = $compact;
 
 		if(! $color) $this->chartColor = $dataType->getColor();
 		else $this->chartColor = $color;
@@ -51,6 +59,7 @@ class ChartWidget extends Component
 		$this->setChartYAxisTitle();
 		$this->setChartYAxisUnit();
 		$this->setXOffset();
+		$this->chartXAxisUnit = $this->selectedTimeInterval->getSuffix();
 	}
 
 	public function render()
@@ -64,6 +73,7 @@ class ChartWidget extends Component
 		$this->setChartData();
 		$this->setChartMinMaxValues();
 		$this->setXOffset();
+		$this->chartXAxisUnit = $this->selectedTimeInterval->getSuffix();
 	}
 
 	protected function setChartData(): void

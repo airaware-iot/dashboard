@@ -36,8 +36,23 @@ enum TimeInterval: string
 			self::LAST_YEAR 				=> Data::getLastYear($dataType),
 		};
 	}
-	//	public static function ()
-//	{
-//		return match($this)
-//	}
+	public function getSuffix(): string
+	{
+		return match($this) {
+			self::LAST_SIX_HOURS,
+			self::LAST_TWELVE_HOURS,
+			self::LAST_TWENTY_FOUR_HOURS,
+			self::LAST_FORTY_EIGHT_HOURS,
+			self::LAST_SEVENTY_TWO_HOURS => 'h',
+
+			self::LAST_THREE_DAYS,
+			self::LAST_WEEK,
+			self::LAST_TWO_WEEKS,
+			self::LAST_MONTH,
+			self::LAST_QUARTER,
+			self::LAST_SEMESTER,
+			self::LAST_YEAR => 'd',
+		};
+	}
+
 }

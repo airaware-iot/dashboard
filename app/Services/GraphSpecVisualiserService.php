@@ -17,8 +17,9 @@ class GraphSpecVisualiserService
 		return [new YAxisRangeAnnotation (
 			y1: $this->type->getSpecs()['min'],
 			y2: $this->type->getSpecs()['max'],
-			color: $this->type->getColor(),
+			color: 'var(--color-complementary)',
 			label: $this->type->getSpecLabel(),
+			labelColor: 'var(--color-black)',
 
 
 		)];
@@ -32,10 +33,11 @@ class GraphSpecVisualiserService
 		foreach($entries as $key => $value) {
 			$lines[] = new YAxisLineAnnotation(
 				y: $value,
-				color: $this->type->getColor(),
+				color: 'var(--color-complementary)',
 				size: 3,
 //				dash: '20,20',
 				label: $this->type->getSpecLabel() . $key,
+				labelColor: 'var(--color-black)',
 //				textLeftMargin: 3
 			);
 		}
