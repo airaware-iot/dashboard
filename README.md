@@ -1,7 +1,7 @@
 # AirAware web application
 The AirAware web application is the center of the entire AirAware system. Written in PHP 8.3 using Laravel 12 and Livewire + TailwindCSS, it is using the latest technologies for blazing fast performance, even on super low power devices like the Raspberry Pi 3 it has been designed for.
 
-## Frotnend
+## Frontnend
 The frontend is built using Livewire and TailwindCSS, allowing for single page application behaviour using exclusively PHP. It allows for automatic polling of new data, ensuring you always see the latest information. It also makes the app very smooth to use, as loading is at a minimum thanks to asynchronous requests.
 
 ## Backend
