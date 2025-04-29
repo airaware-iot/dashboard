@@ -16,8 +16,8 @@
     <title>{{$title}} | AirAware</title>
 </head>
 <body class="h-full bg-turquoise-background overflow-y-hidden">
-<x-dock></x-dock>
-<main class="h-full md:m-12 md:mr-0 md:pr-12 ml-2 mr-0 my-6 p-2  rounded-2xl overscroll-y-none overflow-y-auto">
+<x-dock/>
+<main class="h-full md:m-12 md:mr-0 md:pr-12 ml-2 mr-0 my-6 p-2 pr-4  rounded-2xl overscroll-y-none overflow-y-auto">
         {{$slot}}
     </main>
     @livewireScripts

@@ -12,7 +12,7 @@
 {{--<script>--}}
 {{--    console.log(window.innerWidth)--}}
 {{--</script>--}}
-<div class="p-6 bg-turquoise-foreground rounded-2xl" wire:poll.{{config('app.default_values.polling_rate_slow')}}="update">
+<div class="p-6 bg-turquoise-foreground rounded-2xl relative" wire:poll.{{config('app.default_values.polling_rate_slow')}}="update">
     <div class="mb-4">
         <h2 class="font-semibold text-xl text-white">{{$chartYAxisTitle}}</h2>
         <select wire:change="updateTimeInterval($event.target.value)" class="text-gray-body">
@@ -26,7 +26,8 @@
             @endforeach
         </select>
         @if(! $chartData)
-            <p class="py-1 px-3 bg-turquoise-main text-white rounded-lg inline-block mb-6">Žádná data pro daný interval</p>
+            <p class="py-1 px-3 bg-turquoise-main text-white rounded-lg inline-block mt-4 mb-6 absolute bottom-0 left-6">Žádná data pro daný interval</p>
+            
         @endif
     </div>
     <div>
@@ -94,6 +95,9 @@
 				],
             );
         @endphp
-        {!! $chart->render() !!}
+        <div class="{{! $chartData ? 'invisible pointer-events-none' : ''}}">
+            {!! $chart->render() !!}
+        
+        </div>
     </div>
 </div>

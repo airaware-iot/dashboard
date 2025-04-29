@@ -16,28 +16,33 @@
         <livewire:live-sensor-readout :data-type="\App\Enums\SensorDataType::CO2"/>
         <livewire:live-sensor-readout :data-type="\App\Enums\SensorDataType::LIGHTLEVEL"/>
     </div>
-    <div class="w-full grid grid-cols-[2fr_3fr] grid-rows-2 gap-6 mb-8">
-        <div>
-            <livewire:recommendations-widget/>
-        </div>
-        <div class="grid grid-cols-2 gap-6">
+    <div class="w-full grid xl:grid-cols-[2fr_3fr] gap-6 mb-24 max-sm:mb-32">
+        <livewire:recommendations-widget/>
+        <div class="grid md:grid-cols-2 grid-cols-1 gap-6">
             <livewire:chart-widget
-                compact
                 :data-type="\App\Enums\SensorDataType::TEMPERATURE"
+                compact
             />
             <livewire:chart-widget
                 :data-type="\App\Enums\SensorDataType::LIGHTLEVEL"
+                compact
             />
             <livewire:chart-widget
                 :data-type="\App\Enums\SensorDataType::PRESSURE"
+                compact
             />
             <livewire:chart-widget
                 :data-type="\App\Enums\SensorDataType::CO2"
+                compact
             />
             <livewire:chart-widget
                 :data-type="\App\Enums\SensorDataType::HUMIDITY"
+                compact
             />
-        </div>
-        
-    </div>
+            <livewire:chart-widget
+                :data-type="\App\Enums\SensorDataType::ALTITUDE"
+                compact
+            />
+        </div>br
+    </div>rbro
 </x-layout.layout>

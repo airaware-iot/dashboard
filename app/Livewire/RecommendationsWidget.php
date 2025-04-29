@@ -8,6 +8,7 @@ use Livewire\Component;
 class RecommendationsWidget extends Component
 {
 	public array $recommendations;
+	public int $recommendationsWithoutNoDataMessages;
 	public string $airQualityRating;
 
 	public function mount(): void
@@ -38,7 +39,11 @@ class RecommendationsWidget extends Component
 				continue;
 			}
 			else if($value == '? ') { // No recent data found
-				$recommendations[] = 'Žádná aktuální data pro ' . strtolower($dataType->getLabel()) . '. Zkuste chvíli počkat nebo zkontrolujte, zda není zapotřebí vyměnit baterie u senzoru.';
+				$recommendations[] =
+					'<span class="text-complementary">Žádná aktuální data pro <b class="font-semibold">'
+					. strtolower($dataType->getLabel()) . '</b></span>. Zkuste chvíli počkat nebo zkontrolujte, 
+					zda není zapotřebí vyměnit baterie u senzoru.';
+
 			}
 			else if($value > $limits['limit_high'] && isset($dataType->getRecommendationMessage()['max'])) {
 				$msg = $dataType->getRecommendationMessage()['max'];
@@ -55,13 +60,20 @@ class RecommendationsWidget extends Component
 
 	protected function setRating(): void
 	{
-		$this->airQualityRating = match(count($this->recommendations)) {
+		$recommendationsWithoutNoDataMessages = array_filter($this->recommendations, function ($recommendation) {
+			return ! str_contains($recommendation, 'Žádná aktuální data');
+		});
+
+		$this->recommendationsWithoutNoDataMessages = count($recommendationsWithoutNoDataMessages);
+
+		$this->airQualityRating = match(count($recommendationsWithoutNoDataMessages)) {
 			0 => 'perfektní',
 			1 => 'skvělý',
 			2 => 'dobrý',
 			3 => 'průměrný',
 			4 => 'špatný',
-			5 => 'zdraví nebezpečný'
+			5 => 'zdraví nebezpečný',
+			default => 'neznámý'
 		};
 	}
 

@@ -92,8 +92,8 @@ class ChartWidget extends Component
 	{
 		$data = collect($this->chartData);
 
-		$this->chartMinValue = min(floor($data->min('value')), $this->selectedDataType->getSpecsMinMax()['min']);
-		$this->chartMaxValue = max(ceil($data->max('value')), $this->selectedDataType->getSpecsMinMax()['max']);
+		$this->chartMinValue = min(floor($data->min('value')), $this->selectedDataType->getSpecsMinMax()['min'] ?? 0);
+		$this->chartMaxValue = max(ceil($data->max('value')), $this->selectedDataType->getSpecsMinMax()['max']) ?? 0;
 	}
 
 	protected function setChartYAxisUnit(): void
