@@ -34,7 +34,7 @@ enum SensorDataType: string
 			self::PRESSURE 		=> ['type' => SpecificationType::MINMAX, 'min' => 963.25, 'max' => 1063.25],
 			self::HUMIDITY 		=> ['type' => SpecificationType::MINMAX, 'min' => 30, 'max' => 65],
 			self::CO2			=> ['type' => SpecificationType::MANY, 'entries' => ['oxidu uhličitého' => 900,]],
-			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => ['čtení a psaní' => 500, 'technické kreslení' => 750]],
+			self::LIGHTLEVEL 	=> ['type' => SpecificationType::MANY, 'entries' => ['čtení a psaní   ' => 500, 'technické kreslení    ' => 750]],
 			self::EVENT_COUNT,
 			self::ALTITUDE 		=> ['type' => SpecificationType::NULL],
 		};
@@ -51,9 +51,9 @@ enum SensorDataType: string
 	public function getSpecLabel(): string
 	{
 		return match($this) {
-			self::TEMPERATURE 	=> 'Doporučená teplota ',
+			self::TEMPERATURE 	=> 'Doporučená teplota  ',
 			self::PRESSURE 		=> 'Doporučený tlak ',
-			self::HUMIDITY 		=> 'Doporučená vlhkost ',
+			self::HUMIDITY 		=> 'Doporučená vlhkost   ',
 			self::LIGHTLEVEL 	=> 'Doporučená úroveň osvětlení pro ',
 			self::EVENT_COUNT 	=> 'Počet kliknutí ',
 			self::ALTITUDE 		=> 'Nadmořská výška ',
@@ -67,7 +67,7 @@ enum SensorDataType: string
 			self::TEMPERATURE 	=> 'Teplota',
 			self::PRESSURE 		=> 'Tlak',
 			self::HUMIDITY 		=> 'Vlhkost',
-			self::LIGHTLEVEL 	=> 'Množství světla',
+			self::LIGHTLEVEL 	=> 'Intenzita světla',
 			self::EVENT_COUNT 	=> 'Počet kliknutí',
 			self::ALTITUDE 		=> 'Nadmořská výška',
 			self::CO2 			=> 'Oxid uhličitý'
@@ -76,14 +76,14 @@ enum SensorDataType: string
 
 	public function getColor(): string
 	{
-		return match($this) {
-			self::TEMPERATURE 	=> '#FF5733',  // Warm orange-red
-			self::PRESSURE 		=> '#3498DB',  // Calm blue
-			self::HUMIDITY 		=> '#1ABC9C',  // Fresh green
-			self::LIGHTLEVEL 	=> '#F1C40F',  // Bright yellow
-			self::EVENT_COUNT 	=> '#9B59B6',  // Purple
-			self::ALTITUDE 		=> '#2C3E50',  // Deep navy blue
-			self::CO2			=> '#1E1E1E',  // Dark gray
+		return match ($this) {
+			self::TEMPERATURE   => 'var(--color-datatype-temperature)',
+			self::PRESSURE      => 'var(--color-datatype-pressure)',
+			self::HUMIDITY      => 'var(--color-datatype-humidity)',
+			self::LIGHTLEVEL    => 'var(--color-datatype-lightlevel)',
+			self::EVENT_COUNT   => 'var(--color-datatype-event-count)',
+			self::ALTITUDE      => 'var(--color-datatype-altitude)',
+			self::CO2           => 'var(--color-datatype-co2)',
 		};
 	}
 

@@ -16,11 +16,13 @@
     --color-gray-body: #C0C0C0;
     --color-white: #f8f8f8;
 
-    --color-datatype-temperature: #E79446;
-    --color-datatype-humidity: #8CD790;
-    --color-datatype-lightlevel: #58A4B0;
-    --color-datatype-pressure: #F9B4ED;
-    --color-datatype-co2: #533E2D;
+    --color-datatype-temperature: #e3844c;
+    --color-datatype-humidity: #62d2e0;
+    --color-datatype-lightlevel: #d34671;
+    --color-datatype-pressure: #e579ef;
+    --color-datatype-co2: #9af369;
+    --color-datatype-altitude: #bde73e;
+    --color-datatype-event-count: #9B59B6;
 
     --color-clear: #00000000
 }

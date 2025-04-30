@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DatabaseController;
 use App\Http\Controllers\DataController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
@@ -10,10 +11,8 @@ Route::get('/test', function() {
 });
 
 Route::view('/', 'app.overview')->name('index');
-Route::view('/databaze', 'app.database')->name('database');
-Route::view('/dokumenty', 'app.docs')->name('docs');
-Route::view('/doporuceni', 'app.tips')->name('tips');
-Route::view('/nastaveni', 'app.settings')->name('settings');
+Route::get('/databaze', [DatabaseController::class, 'view'])->name('database');
+Route::view('/grafy', 'app.graphs')->name('graphs');
 
 
 
